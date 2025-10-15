@@ -35,4 +35,6 @@ function MiniChartView({ ticker }) {
   );
 }
 
-export default memo(TradingViewWidget);
+export default memo(MiniChartView, (prevProps, nextProps) => {
+  return prevProps.ticker === nextProps.ticker;
+});
