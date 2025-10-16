@@ -17,7 +17,7 @@ const Signup = () => {
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
     // Mock signup - in real app, create account here
-    navigate("/dashboard");
+    navigate("/app/dashboard");
   };
 
   return (

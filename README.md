@@ -133,21 +133,21 @@ All data is designed to simulate a real trading environment for demonstration pu
 - Features showcase
 - Footer with links
 
-### Dashboard (`/dashboard`)
+### Dashboard (`/app/dashboard`)
 - Quick stats cards (P&L, Win Rate, Streak, Rank)
 - Activity heatmap
 - Weekly P&L chart
 - Recent trades list
 - Funding offers
 
-### Trade Terminal (`/trade`)
+### Trade Terminal (`/app/trade`)
 - Real-time price charts
 - Order panel (Long/Short)
 - Market selector
 - Open positions tracker
 - Trade history
 
-### Analytics (`/analytics`)
+### Analytics (`/app/analytics`)
 - Performance metrics
 - P&L over time chart
 - Win/loss ratio pie chart
@@ -155,7 +155,7 @@ All data is designed to simulate a real trading environment for demonstration pu
 - Achievement badges
 - AI insights
 
-### Leaderboard (`/leaderboard`)
+### Leaderboard (`/app/leaderboard`)
 - Global rankings
 - Timeframe filters
 - Trader search

@@ -44,14 +44,14 @@ const Navbar = () => {
             <span className="hidden sm:inline">Connect Wallet</span>
           </Button>
 
-          <Link to="/settings">
+          <Link to="/app/settings">
             <Button variant="ghost" size="icon">
               <Settings className="w-5 h-5" />
             </Button>
           </Link>
 
           {/* User Avatar */}
-          <Link to="/profile" className="flex items-center gap-2 p-1 rounded-lg hover:bg-muted/50 transition-colors">
+          <Link to="/app/profile" className="flex items-center gap-2 p-1 rounded-lg hover:bg-muted/50 transition-colors">
             <img 
               src={currentUser.avatar} 
               alt={currentUser.username}

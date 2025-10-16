@@ -183,7 +183,7 @@ const Dashboard = () => {
                   <p className="text-2xl font-bold text-success">${currentUser.totalPnL.toFixed(2)}</p>
                   <p className="text-sm text-muted-foreground">Total P&L</p>
                 </div>
-                <Link to="/analytics">
+                <Link to="/app/analytics">
                   <Button variant="outline" size="sm">View Details</Button>
                 </Link>
               </div>
@@ -238,7 +238,7 @@ const Dashboard = () => {
           >
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold">Market Overview</h3>
-              <Link to="/trade">
+              <Link to="/app/trade">
                 <Button variant="outline" size="sm">Open Trade Terminal</Button>
               </Link>
             </div>
@@ -270,7 +270,7 @@ const Dashboard = () => {
           >
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold">Recent Trades</h3>
-              <Link to="/trade">
+              <Link to="/app/trade">
                 <Button variant="outline" size="sm">New Trade</Button>
               </Link>
             </div>
@@ -437,19 +437,19 @@ const Dashboard = () => {
           >
             <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
             <div className="space-y-2">
-              <Link to="/trade">
+              <Link to="/app/trade">
                 <Button className="w-full justify-start" variant="outline">
                   <Activity className="w-4 h-4 mr-2" />
                   Open Trade Terminal
                 </Button>
               </Link>
-              <Link to="/analytics">
+              <Link to="/app/analytics">
                 <Button className="w-full justify-start" variant="outline">
                   <Target className="w-4 h-4 mr-2" />
                   View Analytics
                 </Button>
               </Link>
-              <Link to="/challenges">
+              <Link to="/app/challenges">
                 <Button className="w-full justify-start" variant="outline">
                   <Award className="w-4 h-4 mr-2" />
                   Join Challenge
