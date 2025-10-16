@@ -17,6 +17,7 @@ import Settings from "./pages/Settings";
 import Clients from "./pages/Clients";
 import Challenges from "./pages/Challenges";
 import NotFound from "./pages/NotFound";
+import AppLayout from "./pages/app";
 
 const queryClient = new QueryClient();
 
@@ -26,26 +27,27 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <div className="min-h-screen w-full">
+        <div className="h-screen w-full">
           <Navbar />
-          <Sidebar />
-          <main className="lg:ml-64 pt-16">
+          <div className="pt-16 h-full">
             <Routes>
               <Route path="/" element={<Landing />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/trade" element={<Trade />} />
-              <Route path="/analytics" element={<Analytics />} />
-              <Route path="/leaderboard" element={<Leaderboard />} />
-              <Route path="/portfolio" element={<Portfolio />} />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="/clients" element={<Clients />} />
-              <Route path="/challenges" element={<Challenges />} />
+              <Route path="/app" element={<AppLayout />}>
+                <Route path="dashboard" element={<Dashboard />} />
+                <Route path="trade" element={<Trade />} />
+                <Route path="analytics" element={<Analytics />} />
+                <Route path="leaderboard" element={<Leaderboard />} />
+                <Route path="portfolio" element={<Portfolio />} />
+                <Route path="settings" element={<Settings />} />
+                <Route path="clients" element={<Clients />} />
+                <Route path="challenges" element={<Challenges />} />
+              </Route>
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </main>
+          </div>
         </div>
       </BrowserRouter>
     </TooltipProvider>

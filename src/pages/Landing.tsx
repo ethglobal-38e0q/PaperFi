@@ -64,12 +64,12 @@ const Landing = () => {
               Prove your skills and get funded by real clients.
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
-              <Link to="/signup">
+              <Link to="/app/dashboard">
                 <Button size="lg" className="gap-2 glow-primary text-lg px-8">
                   Start Practicing <ArrowRight className="w-5 h-5" />
                 </Button>
               </Link>
-              <Link to="/leaderboard">
+              <Link to="/app/leaderboard">
                 <Button size="lg" variant="outline" className="text-lg px-8">
                   View Leaderboard
                 </Button>
@@ -153,7 +153,7 @@ const Landing = () => {
               <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
                 Join thousands of traders improving their skills every day
               </p>
-              <Link to="/signup">
+              <Link to="/app/dashboard">
                 <Button size="lg" className="gap-2 glow-primary text-lg px-8">
                   Get Started Free <Zap className="w-5 h-5" />
                 </Button>

@@ -12,14 +12,14 @@ import {
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
-  { icon: TrendingUp, label: "Trade", path: "/trade" },
-  { icon: BarChart3, label: "Analytics", path: "/analytics" },
-  { icon: Trophy, label: "Leaderboard", path: "/leaderboard" },
-  { icon: Briefcase, label: "Portfolio", path: "/portfolio" },
-  { icon: Users, label: "Client Portal", path: "/clients" },
-  { icon: Target, label: "Challenges", path: "/challenges" },
-  { icon: Settings, label: "Settings", path: "/settings" },
+  { icon: LayoutDashboard, label: "Dashboard", path: "/app/dashboard" },
+  { icon: TrendingUp, label: "Trade", path: "/app/trade" },
+  { icon: BarChart3, label: "Analytics", path: "/app/analytics" },
+  { icon: Trophy, label: "Leaderboard", path: "/app/leaderboard" },
+  { icon: Briefcase, label: "Portfolio", path: "/app/portfolio" },
+  { icon: Users, label: "Client Portal", path: "/app/clients" },
+  { icon: Target, label: "Challenges", path: "/app/challenges" },
+  { icon: Settings, label: "Settings", path: "/app/settings" },
 ];
 
 const Sidebar = () => {
@@ -29,7 +29,7 @@ const Sidebar = () => {
   if (isLanding) return null;
 
   return (
-    <aside className="fixed left-0 top-16 bottom-0 w-64 glass border-r border-border/50 hidden lg:flex flex-col">
+    <aside className=" w-64 glass border-r border-border/50 hidden lg:flex flex-col">
       <div className="flex-1 overflow-y-auto py-6">
         <nav className="space-y-1 px-3">
           {navItems.map((item) => {
