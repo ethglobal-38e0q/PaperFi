@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Search, Bell, Wallet, Settings, TrendingUp } from "lucide-react";
 import { currentUser } from "@/data/mockData";
+import { ConnectKitButton } from "connectkit";
 
 const Navbar = () => {
   const location = useLocation();
@@ -39,10 +40,7 @@ const Navbar = () => {
             <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full animate-pulse"></span>
           </Button>
           
-          <Button variant="outline" className="gap-2">
-            <Wallet className="w-4 h-4" />
-            <span className="hidden sm:inline">Connect Wallet</span>
-          </Button>
+          <ConnectKitButton />
 
           <Link to="/app/settings">
             <Button variant="ghost" size="icon">

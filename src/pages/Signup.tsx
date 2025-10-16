@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { TrendingUp, Mail, Lock, User, Wallet } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { ConnectKitButton } from "connectkit";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -139,10 +140,7 @@ const Signup = () => {
           </div>
         </div>
 
-        <Button variant="outline" className="w-full gap-2">
-          <Wallet className="w-4 h-4" />
-          Connect Wallet
-        </Button>
+        <ConnectKitButton />
 
         <p className="text-center text-sm text-muted-foreground mt-6">
           Already have an account?{" "}
