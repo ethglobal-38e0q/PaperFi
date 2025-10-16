@@ -39,7 +39,7 @@ const Navbar = () => {
             <Bell className="w-5 h-5" />
             <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full animate-pulse"></span>
           </Button>
-          
+
           <ConnectKitButton />
 
           <Link to="/app/settings">
@@ -49,13 +49,18 @@ const Navbar = () => {
           </Link>
 
           {/* User Avatar */}
-          <Link to="/app/profile" className="flex items-center gap-2 p-1 rounded-lg hover:bg-muted/50 transition-colors">
-            <img 
-              src={currentUser.avatar} 
+          <Link
+            to="/app/profile"
+            className="flex items-center gap-2 p-1 rounded-lg hover:bg-muted/50 transition-colors"
+          >
+            <img
+              src={currentUser.avatar}
               alt={currentUser.username}
               className="w-8 h-8 rounded-full ring-2 ring-primary/30"
             />
-            <span className="hidden lg:inline font-medium">{currentUser.username}</span>
+            <span className="hidden lg:inline font-medium">
+              {currentUser.username}
+            </span>
           </Link>
         </div>
       </div>

@@ -4,7 +4,7 @@ export const currentUser = {
   username: "Varun",
   email: "varun@perppractice.com",
   avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Varun",
-  dailyPnL: 245.50,
+  dailyPnL: 245.5,
   totalPnL: 1550.25,
   winRate: 68.4,
   streak: 3,
@@ -23,33 +23,33 @@ export const pnlHistory = [
   { date: "2025-10-13", pnl: 310, trades: 6 },
   { date: "2025-10-14", pnl: -100, trades: 4 },
   { date: "2025-10-15", pnl: 180, trades: 7 },
-  { date: "2025-10-16", pnl: 245.50, trades: 9 },
+  { date: "2025-10-16", pnl: 245.5, trades: 9 },
 ];
 
 export const marketData = {
-  BTCUSDT: { 
-    price: 68750.30, 
-    change: 1.24, 
+  BTCUSDT: {
+    price: 68750.3,
+    change: 1.24,
     volume: "2.45B",
     high24h: 69200,
     low24h: 67800,
   },
-  ETHUSDT: { 
-    price: 3510.75, 
+  ETHUSDT: {
+    price: 3510.75,
     change: -0.52,
     volume: "1.82B",
     high24h: 3580,
     low24h: 3490,
   },
-  SOLUSDT: { 
-    price: 185.42, 
+  SOLUSDT: {
+    price: 185.42,
     change: 3.18,
     volume: "845M",
     high24h: 188,
     low24h: 179,
   },
-  BNBUSDT: { 
-    price: 612.88, 
+  BNBUSDT: {
+    price: 612.88,
     change: 0.87,
     volume: "520M",
     high24h: 620,
@@ -58,55 +58,55 @@ export const marketData = {
 };
 
 export const leaderboard = [
-  { 
+  {
     id: 1,
-    name: "CryptoMonk", 
+    name: "CryptoMonk",
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=CryptoMonk",
-    pnl: 3420.50, 
+    pnl: 3420.5,
     pnlPercent: 85.2,
     streak: 8,
     winRate: 78.5,
     totalVolume: "12.5M",
     successPoints: 15400,
   },
-  { 
+  {
     id: 2,
-    name: "MoonTrader", 
+    name: "MoonTrader",
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=MoonTrader",
-    pnl: 2890.25, 
+    pnl: 2890.25,
     pnlPercent: 72.3,
     streak: 5,
     winRate: 74.2,
     totalVolume: "9.8M",
     successPoints: 12850,
   },
-  { 
+  {
     id: 3,
-    name: "Varun", 
+    name: "Varun",
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Varun",
-    pnl: 1550.25, 
+    pnl: 1550.25,
     pnlPercent: 68.4,
     streak: 3,
     winRate: 68.4,
     totalVolume: "5.2M",
     successPoints: 8450,
   },
-  { 
+  {
     id: 4,
-    name: "DiamondHands", 
+    name: "DiamondHands",
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=DiamondHands",
-    pnl: 1420.80, 
+    pnl: 1420.8,
     pnlPercent: 65.8,
     streak: 4,
     winRate: 70.1,
     totalVolume: "6.1M",
     successPoints: 9200,
   },
-  { 
+  {
     id: 5,
-    name: "BullRun", 
+    name: "BullRun",
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=BullRun",
-    pnl: 1380.40, 
+    pnl: 1380.4,
     pnlPercent: 64.2,
     streak: 2,
     winRate: 66.8,
@@ -124,7 +124,7 @@ export const recentTrades = [
     exitPrice: 68750,
     size: 0.5,
     leverage: 10,
-    pnl: 275.50,
+    pnl: 275.5,
     pnlPercent: 8.05,
     timestamp: "2025-10-16T14:23:00Z",
     status: "closed",
@@ -137,7 +137,7 @@ export const recentTrades = [
     exitPrice: 3510,
     size: 2,
     leverage: 5,
-    pnl: 175.00,
+    pnl: 175.0,
     pnlPercent: 4.93,
     timestamp: "2025-10-16T13:45:00Z",
     status: "closed",
@@ -146,11 +146,11 @@ export const recentTrades = [
     id: "T003",
     pair: "SOLUSDT",
     type: "LONG",
-    entryPrice: 183.50,
+    entryPrice: 183.5,
     exitPrice: 185.42,
     size: 10,
     leverage: 15,
-    pnl: 288.00,
+    pnl: 288.0,
     pnlPercent: 23.55,
     timestamp: "2025-10-16T12:10:00Z",
     status: "closed",
@@ -173,19 +173,46 @@ export const recentTrades = [
 
 export const openPositions = recentTrades.filter(t => t.status === "open");
 
-export const heatmapData = [
-  // Last 12 weeks of trading activity
-  ...Array.from({ length: 84 }, (_, i) => {
-    const date = new Date();
-    date.setDate(date.getDate() - (83 - i));
-    const trades = Math.floor(Math.random() * 12);
-    return {
-      date: date.toISOString().split('T')[0],
-      count: trades,
-      pnl: trades > 0 ? (Math.random() * 200 - 50) : 0,
-    };
-  }),
-];
+export const heatmapData = (() => {
+  const currentDate = new Date(); // Today's date
+  const currentYear = 2025;
+  const startOfYear = new Date(currentYear, 0, 1); // January 1, 2025
+  const endOfYear = new Date(currentYear, 11, 31); // December 31, 2025
+  const totalDaysInYear = 365; // 2025 is not a leap year
+
+  const data = [];
+
+  // Generate data for each day of the year
+  for (let day = 0; day < totalDaysInYear; day++) {
+    const date = new Date(startOfYear);
+    date.setDate(startOfYear.getDate() + day);
+    const dateString = date.toISOString().split("T")[0];
+
+    // Check if this date is in the past (up to current date)
+    const isPastOrToday = date <= currentDate;
+
+    if (isPastOrToday) {
+      // Generate random trading data for past dates
+      const trades = Math.floor(Math.random() * 12);
+      const pnl = trades > 0 ? Math.random() * 400 - 100 : 0; // More varied P&L range
+
+      data.push({
+        date: dateString,
+        count: trades,
+        pnl: Math.round(pnl * 100) / 100, // Round to 2 decimal places
+      });
+    } else {
+      // Future dates - greyed out (no trading activity)
+      data.push({
+        date: dateString,
+        count: 0,
+        pnl: 0,
+      });
+    }
+  }
+
+  return data;
+})();
 
 export const platformStats = {
   totalVolume: "2.8B",
@@ -201,7 +228,7 @@ export const candlestickData = Array.from({ length: 100 }, (_, i) => {
   const close = open + (Math.random() * 400 - 200);
   const high = Math.max(open, close) + Math.random() * 200;
   const low = Math.min(open, close) - Math.random() * 200;
-  
+
   return {
     time: Date.now() - (100 - i) * 60000,
     open,

@@ -7,13 +7,15 @@ const MarketTicker = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setPrices((prev) => {
+      setPrices(prev => {
         const updated = { ...prev };
-        Object.keys(updated).forEach((pair) => {
+        Object.keys(updated).forEach(pair => {
           const change = (Math.random() - 0.5) * 0.2;
           updated[pair as keyof typeof marketData] = {
             ...updated[pair as keyof typeof marketData],
-            price: updated[pair as keyof typeof marketData].price * (1 + change / 100),
+            price:
+              updated[pair as keyof typeof marketData].price *
+              (1 + change / 100),
             change: updated[pair as keyof typeof marketData].change + change,
           };
         });
@@ -35,11 +37,18 @@ const MarketTicker = () => {
             animate={{ opacity: 1 }}
           >
             <div>
-              <p className="text-xs text-muted-foreground">{pair.replace("USDT", "/USDT")}</p>
-              <p className="font-mono font-bold text-sm">${data.price.toFixed(2)}</p>
+              <p className="text-xs text-muted-foreground">
+                {pair.replace("USDT", "/USDT")}
+              </p>
+              <p className="font-mono font-bold text-sm">
+                ${data.price.toFixed(2)}
+              </p>
             </div>
-            <div className={`text-xs font-semibold ${data.change > 0 ? "text-success" : "text-loss"}`}>
-              {data.change > 0 ? "+" : ""}{data.change.toFixed(2)}%
+            <div
+              className={`text-xs font-semibold ${data.change > 0 ? "text-success" : "text-loss"}`}
+            >
+              {data.change > 0 ? "+" : ""}
+              {data.change.toFixed(2)}%
             </div>
           </motion.div>
         ))}

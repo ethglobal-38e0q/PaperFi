@@ -2,22 +2,23 @@ import { openPositions, recentTrades, currentUser } from "@/data/mockData";
 import StatsCard from "@/components/StatsCard";
 import { Wallet, TrendingUp, Activity, DollarSign } from "lucide-react";
 import { motion } from "framer-motion";
-import { 
-  PieChart, 
-  Pie, 
-  Cell, 
-  ResponsiveContainer,
-  Tooltip
-} from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 
 const Portfolio = () => {
   const totalValue = 10000 + currentUser.totalPnL;
-  const allocatedCapital = openPositions.reduce((sum, pos) => sum + (pos.size * pos.entryPrice), 0);
+  const allocatedCapital = openPositions.reduce(
+    (sum, pos) => sum + pos.size * pos.entryPrice,
+    0
+  );
   const freeCapital = totalValue - allocatedCapital;
 
   const allocationData = [
     { name: "Free Capital", value: freeCapital, fill: "hsl(var(--muted))" },
-    { name: "Open Positions", value: allocatedCapital, fill: "hsl(var(--primary))" },
+    {
+      name: "Open Positions",
+      value: allocatedCapital,
+      fill: "hsl(var(--primary))",
+    },
   ];
 
   return (
@@ -99,13 +100,20 @@ const Portfolio = () => {
             </ResponsiveContainer>
           </div>
           <div className="flex justify-center gap-8 mt-4">
-            {allocationData.map((item) => (
+            {allocationData.map(item => (
               <div key={item.name} className="text-center">
                 <div className="flex items-center gap-2 justify-center">
-                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.fill }} />
-                  <span className="text-sm text-muted-foreground">{item.name}</span>
+                  <div
+                    className="w-3 h-3 rounded-full"
+                    style={{ backgroundColor: item.fill }}
+                  />
+                  <span className="text-sm text-muted-foreground">
+                    {item.name}
+                  </span>
                 </div>
-                <p className="text-xl font-bold mt-1">${item.value.toFixed(2)}</p>
+                <p className="text-xl font-bold mt-1">
+                  ${item.value.toFixed(2)}
+                </p>
               </div>
             ))}
           </div>
@@ -120,27 +128,31 @@ const Portfolio = () => {
         >
           <h3 className="text-lg font-semibold mb-4">Position Breakdown</h3>
           <div className="space-y-3">
-            {openPositions.map((position) => {
+            {openPositions.map(position => {
               const positionValue = position.size * position.entryPrice;
               const percentage = (positionValue / totalValue) * 100;
-              
+
               return (
                 <div key={position.id} className="p-4 bg-muted/30 rounded-lg">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      <span className={`px-2 py-1 rounded text-xs font-semibold ${
-                        position.type === "LONG" 
-                          ? "bg-success/20 text-success" 
-                          : "bg-loss/20 text-loss"
-                      }`}>
+                      <span
+                        className={`px-2 py-1 rounded text-xs font-semibold ${
+                          position.type === "LONG"
+                            ? "bg-success/20 text-success"
+                            : "bg-loss/20 text-loss"
+                        }`}
+                      >
                         {position.type}
                       </span>
                       <span className="font-bold">{position.pair}</span>
                     </div>
-                    <span className="text-sm font-semibold">{percentage.toFixed(1)}%</span>
+                    <span className="text-sm font-semibold">
+                      {percentage.toFixed(1)}%
+                    </span>
                   </div>
                   <div className="w-full bg-muted rounded-full h-2 mb-2">
-                    <div 
+                    <div
                       className="bg-primary h-2 rounded-full transition-all"
                       style={{ width: `${percentage}%` }}
                     />
@@ -149,7 +161,13 @@ const Portfolio = () => {
                     <span className="text-muted-foreground">
                       {position.size} @ ${position.entryPrice}
                     </span>
-                    <span className={position.pnl > 0 ? "text-success font-semibold" : "text-loss font-semibold"}>
+                    <span
+                      className={
+                        position.pnl > 0
+                          ? "text-success font-semibold"
+                          : "text-loss font-semibold"
+                      }
+                    >
                       {position.pnl > 0 ? "+" : ""}${position.pnl.toFixed(2)}
                     </span>
                   </div>
@@ -169,17 +187,19 @@ const Portfolio = () => {
       >
         <h3 className="text-lg font-semibold mb-4">Recent Performance</h3>
         <div className="space-y-2">
-          {recentTrades.slice(0, 10).map((trade) => (
+          {recentTrades.slice(0, 10).map(trade => (
             <div
               key={trade.id}
               className="flex items-center justify-between p-3 bg-muted/20 rounded-lg hover:bg-muted/40 transition-colors"
             >
               <div className="flex items-center gap-4">
-                <span className={`px-2 py-1 rounded text-xs font-semibold ${
-                  trade.type === "LONG" 
-                    ? "bg-success/20 text-success" 
-                    : "bg-loss/20 text-loss"
-                }`}>
+                <span
+                  className={`px-2 py-1 rounded text-xs font-semibold ${
+                    trade.type === "LONG"
+                      ? "bg-success/20 text-success"
+                      : "bg-loss/20 text-loss"
+                  }`}
+                >
                   {trade.type}
                 </span>
                 <div>
@@ -197,11 +217,14 @@ const Portfolio = () => {
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className={`text-lg font-bold ${trade.pnl > 0 ? "text-success" : "text-loss"}`}>
+                  <p
+                    className={`text-lg font-bold ${trade.pnl > 0 ? "text-success" : "text-loss"}`}
+                  >
                     {trade.pnl > 0 ? "+" : ""}${trade.pnl.toFixed(2)}
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    {trade.pnlPercent > 0 ? "+" : ""}{trade.pnlPercent.toFixed(2)}%
+                    {trade.pnlPercent > 0 ? "+" : ""}
+                    {trade.pnlPercent.toFixed(2)}%
                   </p>
                 </div>
               </div>

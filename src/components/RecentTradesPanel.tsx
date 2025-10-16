@@ -33,7 +33,7 @@ const RecentTradesPanel = ({ pair }: { pair: string }) => {
         time: new Date().toLocaleTimeString(),
         side: Math.random() > 0.5 ? "buy" : "sell",
       };
-      setTrades((prev) => [newTrade, ...prev.slice(0, 14)]);
+      setTrades(prev => [newTrade, ...prev.slice(0, 14)]);
     }, 3000);
 
     return () => clearInterval(interval);
@@ -41,8 +41,10 @@ const RecentTradesPanel = ({ pair }: { pair: string }) => {
 
   return (
     <div className="glass p-4 rounded-xl h-full">
-      <h3 className="text-sm font-semibold mb-3 text-muted-foreground">RECENT TRADES</h3>
-      
+      <h3 className="text-sm font-semibold mb-3 text-muted-foreground">
+        RECENT TRADES
+      </h3>
+
       <div className="grid grid-cols-3 gap-2 text-xs text-muted-foreground mb-2 px-2">
         <div>Price (USDT)</div>
         <div className="text-right">Size</div>
@@ -61,13 +63,19 @@ const RecentTradesPanel = ({ pair }: { pair: string }) => {
                 trade.side === "buy" ? "hover:bg-success/5" : "hover:bg-loss/5"
               } transition-colors`}
             >
-              <div className={`font-mono font-semibold ${
-                trade.side === "buy" ? "text-success" : "text-loss"
-              }`}>
+              <div
+                className={`font-mono font-semibold ${
+                  trade.side === "buy" ? "text-success" : "text-loss"
+                }`}
+              >
                 {trade.price.toFixed(2)}
               </div>
-              <div className="text-right font-mono">{trade.size.toFixed(4)}</div>
-              <div className="text-right text-muted-foreground">{trade.time}</div>
+              <div className="text-right font-mono">
+                {trade.size.toFixed(4)}
+              </div>
+              <div className="text-right text-muted-foreground">
+                {trade.time}
+              </div>
             </motion.div>
           ))}
         </AnimatePresence>

@@ -32,7 +32,7 @@ const Heatmap = () => {
               <div
                 key={`${weekIndex}-${dayIndex}`}
                 className={`w-3 h-3 rounded-sm ${getIntensityColor(day.count)} transition-all hover:ring-2 hover:ring-primary/50 cursor-pointer`}
-                title={`${day.date}: ${day.count} trades, P&L: ${day.pnl > 0 ? '+' : ''}${day.pnl.toFixed(2)}`}
+                title={`${day.date}: ${day.count} trades, P&L: ${day.pnl > 0 ? "+" : ""}${day.pnl.toFixed(2)}`}
               />
             ))}
           </div>

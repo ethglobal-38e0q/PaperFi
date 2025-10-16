@@ -3,7 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Settings as SettingsIcon, User, Bell, Shield, Palette } from "lucide-react";
+import {
+  Settings as SettingsIcon,
+  User,
+  Bell,
+  Shield,
+  Palette,
+} from "lucide-react";
 import { motion } from "framer-motion";
 
 const Settings = () => {
@@ -54,13 +60,15 @@ const Settings = () => {
           {/* Profile Tab */}
           <TabsContent value="profile" className="space-y-6">
             <div className="flex items-center gap-6">
-              <img 
-                src={currentUser.avatar} 
+              <img
+                src={currentUser.avatar}
                 alt={currentUser.username}
                 className="w-24 h-24 rounded-full ring-4 ring-primary/30"
               />
               <div>
-                <Button variant="outline" size="sm">Change Avatar</Button>
+                <Button variant="outline" size="sm">
+                  Change Avatar
+                </Button>
                 <p className="text-xs text-muted-foreground mt-2">
                   JPG, PNG or GIF. Max size 2MB
                 </p>
@@ -70,16 +78,16 @@ const Settings = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <Label htmlFor="username">Username</Label>
-                <Input 
-                  id="username" 
+                <Input
+                  id="username"
                   defaultValue={currentUser.username}
                   className="mt-2"
                 />
               </div>
               <div>
                 <Label htmlFor="email">Email</Label>
-                <Input 
-                  id="email" 
+                <Input
+                  id="email"
                   type="email"
                   defaultValue={currentUser.email}
                   className="mt-2"
@@ -89,7 +97,7 @@ const Settings = () => {
 
             <div>
               <Label htmlFor="bio">Bio</Label>
-              <textarea 
+              <textarea
                 id="bio"
                 className="w-full mt-2 p-3 bg-muted/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
                 rows={4}
@@ -164,24 +172,20 @@ const Settings = () => {
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="current-password">Current Password</Label>
-                  <Input 
-                    id="current-password" 
+                  <Input
+                    id="current-password"
                     type="password"
                     className="mt-2"
                   />
                 </div>
                 <div>
                   <Label htmlFor="new-password">New Password</Label>
-                  <Input 
-                    id="new-password" 
-                    type="password"
-                    className="mt-2"
-                  />
+                  <Input id="new-password" type="password" className="mt-2" />
                 </div>
                 <div>
                   <Label htmlFor="confirm-password">Confirm New Password</Label>
-                  <Input 
-                    id="confirm-password" 
+                  <Input
+                    id="confirm-password"
                     type="password"
                     className="mt-2"
                   />
@@ -191,7 +195,9 @@ const Settings = () => {
             </div>
 
             <div className="border-t border-border pt-6">
-              <h3 className="text-lg font-semibold mb-4">Two-Factor Authentication</h3>
+              <h3 className="text-lg font-semibold mb-4">
+                Two-Factor Authentication
+              </h3>
               <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
                 <div>
                   <p className="font-semibold">2FA Status</p>
@@ -228,7 +234,9 @@ const Settings = () => {
                 </div>
                 <div className="p-4 bg-muted/30 rounded-lg border border-border cursor-pointer opacity-50">
                   <div className="w-full h-32 bg-gradient-to-br from-gray-100 to-gray-300 rounded-lg mb-3"></div>
-                  <p className="font-semibold text-center">Light (Coming Soon)</p>
+                  <p className="font-semibold text-center">
+                    Light (Coming Soon)
+                  </p>
                 </div>
               </div>
             </div>
@@ -242,7 +250,7 @@ const Settings = () => {
                   { name: "Teal", color: "hsl(174 72% 56%)" },
                   { name: "Green", color: "hsl(142 76% 46%)" },
                   { name: "Red", color: "hsl(0 72% 61%)" },
-                ].map((color) => (
+                ].map(color => (
                   <button
                     key={color.name}
                     className="aspect-square rounded-lg border-2 border-transparent hover:border-foreground transition-all"

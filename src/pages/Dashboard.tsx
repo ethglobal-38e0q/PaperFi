@@ -1,25 +1,55 @@
-import { TrendingUp, TrendingDown, Target, Award, Users, Zap, Activity, Clock, DollarSign, AlertCircle } from "lucide-react";
+import {
+  TrendingUp,
+  TrendingDown,
+  Target,
+  Award,
+  Users,
+  Zap,
+  Activity,
+  Clock,
+  DollarSign,
+  AlertCircle,
+} from "lucide-react";
 import StatsCard from "@/components/StatsCard";
 import Heatmap from "@/components/Heatmap";
 import MiniChart from "@/components/MiniChart";
-import { currentUser, recentTrades, fundingOffers, pnlHistory, marketData } from "@/data/mockData";
+import {
+  currentUser,
+  recentTrades,
+  fundingOffers,
+  pnlHistory,
+  marketData,
+} from "@/data/mockData";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+import {
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
 
 const Dashboard = () => {
   const container = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: { staggerChildren: 0.05 }
-    }
+      transition: { staggerChildren: 0.05 },
+    },
   };
 
   const item = {
     hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 }
+    show: { opacity: 1, y: 0 },
   };
 
   const hourlyPnL = [
@@ -47,7 +77,8 @@ const Dashboard = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold mb-2">
-              Welcome back, <span className="gradient-text">{currentUser.username}</span>
+              Welcome back,{" "}
+              <span className="gradient-text">{currentUser.username}</span>
             </h1>
             <p className="text-muted-foreground">
               Real-time performance tracking • Rank #{currentUser.rank} globally
@@ -129,19 +160,18 @@ const Dashboard = () => {
         </motion.div>
       </motion.div>
 
+      {/* Performance Heatmap */}
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.2 }}
+      >
+        <Heatmap />
+      </motion.div>
       {/* Main Content Grid - Complex Layout */}
       <div className="grid grid-cols-12 gap-4">
         {/* Left Column - Charts */}
         <div className="col-span-12 lg:col-span-8 space-y-4">
-          {/* Performance Heatmap */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <Heatmap />
-          </motion.div>
-
           {/* Dual Chart Panel */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <motion.div
@@ -153,38 +183,54 @@ const Dashboard = () => {
               <h3 className="text-lg font-semibold mb-4">P&L Trend (7d)</h3>
               <ResponsiveContainer width="100%" height={200}>
                 <LineChart data={pnlHistory}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
-                  <XAxis 
-                    dataKey="date" 
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="hsl(var(--border))"
+                    opacity={0.3}
+                  />
+                  <XAxis
+                    dataKey="date"
                     stroke="hsl(var(--muted-foreground))"
                     tick={{ fontSize: 10 }}
-                    tickFormatter={(date) => new Date(date).toLocaleDateString([], { month: 'short', day: 'numeric' })}
+                    tickFormatter={date =>
+                      new Date(date).toLocaleDateString([], {
+                        month: "short",
+                        day: "numeric",
+                      })
+                    }
                   />
-                  <YAxis stroke="hsl(var(--muted-foreground))" tick={{ fontSize: 10 }} />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: 'hsl(var(--card))', 
-                      border: '1px solid hsl(var(--border))',
-                      borderRadius: '8px',
-                      fontSize: '12px'
+                  <YAxis
+                    stroke="hsl(var(--muted-foreground))"
+                    tick={{ fontSize: 10 }}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "hsl(var(--card))",
+                      border: "1px solid hsl(var(--border))",
+                      borderRadius: "8px",
+                      fontSize: "12px",
                     }}
                   />
-                  <Line 
-                    type="monotone" 
-                    dataKey="pnl" 
-                    stroke="hsl(var(--success))" 
+                  <Line
+                    type="monotone"
+                    dataKey="pnl"
+                    stroke="hsl(var(--success))"
                     strokeWidth={3}
-                    dot={{ fill: 'hsl(var(--success))' }}
+                    dot={{ fill: "hsl(var(--success))" }}
                   />
                 </LineChart>
               </ResponsiveContainer>
               <div className="mt-4 flex items-center justify-between">
                 <div>
-                  <p className="text-2xl font-bold text-success">${currentUser.totalPnL.toFixed(2)}</p>
+                  <p className="text-2xl font-bold text-success">
+                    ${currentUser.totalPnL.toFixed(2)}
+                  </p>
                   <p className="text-sm text-muted-foreground">Total P&L</p>
                 </div>
                 <Link to="/app/analytics">
-                  <Button variant="outline" size="sm">View Details</Button>
+                  <Button variant="outline" size="sm">
+                    View Details
+                  </Button>
                 </Link>
               </div>
             </motion.div>
@@ -198,18 +244,33 @@ const Dashboard = () => {
               <h3 className="text-lg font-semibold mb-4">Today's Activity</h3>
               <ResponsiveContainer width="100%" height={200}>
                 <BarChart data={hourlyPnL}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
-                  <XAxis dataKey="hour" stroke="hsl(var(--muted-foreground))" tick={{ fontSize: 10 }} />
-                  <YAxis stroke="hsl(var(--muted-foreground))" tick={{ fontSize: 10 }} />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: 'hsl(var(--card))', 
-                      border: '1px solid hsl(var(--border))',
-                      borderRadius: '8px',
-                      fontSize: '12px'
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="hsl(var(--border))"
+                    opacity={0.3}
+                  />
+                  <XAxis
+                    dataKey="hour"
+                    stroke="hsl(var(--muted-foreground))"
+                    tick={{ fontSize: 10 }}
+                  />
+                  <YAxis
+                    stroke="hsl(var(--muted-foreground))"
+                    tick={{ fontSize: 10 }}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "hsl(var(--card))",
+                      border: "1px solid hsl(var(--border))",
+                      borderRadius: "8px",
+                      fontSize: "12px",
                     }}
                   />
-                  <Bar dataKey="pnl" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                  <Bar
+                    dataKey="pnl"
+                    fill="hsl(var(--primary))"
+                    radius={[4, 4, 0, 0]}
+                  />
                 </BarChart>
               </ResponsiveContainer>
               <div className="mt-4 grid grid-cols-3 gap-3 text-center">
@@ -239,21 +300,39 @@ const Dashboard = () => {
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold">Market Overview</h3>
               <Link to="/app/trade">
-                <Button variant="outline" size="sm">Open Trade Terminal</Button>
+                <Button variant="outline" size="sm">
+                  Open Trade Terminal
+                </Button>
               </Link>
             </div>
             <div className="grid grid-cols-4 gap-4">
               {Object.entries(marketData).map(([pair, data]) => (
-                <div key={pair} className="p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors cursor-pointer">
-                  <p className="text-sm font-semibold mb-1">{pair.replace("USDT", "/USDT")}</p>
-                  <p className="text-xl font-bold font-mono">${data.price.toLocaleString()}</p>
-                  <p className={`text-sm font-semibold mt-1 ${data.change > 0 ? "text-success" : "text-loss"}`}>
-                    {data.change > 0 ? "+" : ""}{data.change}%
+                <div
+                  key={pair}
+                  className="p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors cursor-pointer"
+                >
+                  <p className="text-sm font-semibold mb-1">
+                    {pair.replace("USDT", "/USDT")}
+                  </p>
+                  <p className="text-xl font-bold font-mono">
+                    ${data.price.toLocaleString()}
+                  </p>
+                  <p
+                    className={`text-sm font-semibold mt-1 ${data.change > 0 ? "text-success" : "text-loss"}`}
+                  >
+                    {data.change > 0 ? "+" : ""}
+                    {data.change}%
                   </p>
                   <div className="mt-2 h-12">
-                    <MiniChart 
-                      data={[...Array(20)].map(() => Math.random() * 100 + data.price)} 
-                      color={data.change > 0 ? "hsl(var(--success))" : "hsl(var(--loss))"}
+                    <MiniChart
+                      data={[...Array(20)].map(
+                        () => Math.random() * 100 + data.price
+                      )}
+                      color={
+                        data.change > 0
+                          ? "hsl(var(--success))"
+                          : "hsl(var(--loss))"
+                      }
                     />
                   </div>
                 </div>
@@ -271,7 +350,9 @@ const Dashboard = () => {
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold">Recent Trades</h3>
               <Link to="/app/trade">
-                <Button variant="outline" size="sm">New Trade</Button>
+                <Button variant="outline" size="sm">
+                  New Trade
+                </Button>
               </Link>
             </div>
             <div className="overflow-x-auto">
@@ -288,23 +369,41 @@ const Dashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {recentTrades.slice(0, 8).map((trade) => (
-                    <tr key={trade.id} className="border-b border-border/50 hover:bg-muted/20">
+                  {recentTrades.slice(0, 8).map(trade => (
+                    <tr
+                      key={trade.id}
+                      className="border-b border-border/50 hover:bg-muted/20"
+                    >
                       <td className="py-2 text-muted-foreground">
-                        {new Date(trade.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        {new Date(trade.timestamp).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
                       </td>
                       <td className="py-2 font-semibold">{trade.pair}</td>
                       <td className="py-2">
-                        <span className={`px-2 py-0.5 rounded text-xs font-semibold ${
-                          trade.type === "LONG" ? "bg-success/20 text-success" : "bg-loss/20 text-loss"
-                        }`}>
+                        <span
+                          className={`px-2 py-0.5 rounded text-xs font-semibold ${
+                            trade.type === "LONG"
+                              ? "bg-success/20 text-success"
+                              : "bg-loss/20 text-loss"
+                          }`}
+                        >
                           {trade.type}
                         </span>
                       </td>
-                      <td className="py-2 text-right font-mono">{trade.size}</td>
-                      <td className="py-2 text-right font-mono">${trade.entryPrice}</td>
-                      <td className="py-2 text-right font-mono">${trade.exitPrice || "Open"}</td>
-                      <td className={`py-2 text-right font-bold ${trade.pnl > 0 ? "text-success" : "text-loss"}`}>
+                      <td className="py-2 text-right font-mono">
+                        {trade.size}
+                      </td>
+                      <td className="py-2 text-right font-mono">
+                        ${trade.entryPrice}
+                      </td>
+                      <td className="py-2 text-right font-mono">
+                        ${trade.exitPrice || "Open"}
+                      </td>
+                      <td
+                        className={`py-2 text-right font-bold ${trade.pnl > 0 ? "text-success" : "text-loss"}`}
+                      >
                         {trade.pnl > 0 ? "+" : ""}${trade.pnl.toFixed(2)}
                       </td>
                     </tr>
@@ -403,17 +502,24 @@ const Dashboard = () => {
               </span>
             </div>
             <div className="space-y-3">
-              {fundingOffers.map((offer) => (
-                <div key={offer.id} className="p-4 bg-primary/5 border border-primary/20 rounded-lg hover:bg-primary/10 transition-colors">
+              {fundingOffers.map(offer => (
+                <div
+                  key={offer.id}
+                  className="p-4 bg-primary/5 border border-primary/20 rounded-lg hover:bg-primary/10 transition-colors"
+                >
                   <div className="flex items-center gap-3 mb-2">
-                    <img 
-                      src={offer.clientAvatar} 
+                    <img
+                      src={offer.clientAvatar}
                       alt={offer.clientName}
                       className="w-8 h-8 rounded-full"
                     />
                     <div className="flex-1">
-                      <p className="font-semibold text-sm">{offer.clientName}</p>
-                      <p className="text-xs text-muted-foreground">{offer.profitSplit}</p>
+                      <p className="font-semibold text-sm">
+                        {offer.clientName}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {offer.profitSplit}
+                      </p>
                     </div>
                   </div>
                   <p className="text-xl font-bold text-primary mb-1">
@@ -422,7 +528,9 @@ const Dashboard = () => {
                   <p className="text-xs text-muted-foreground mb-2">
                     {offer.conditions}
                   </p>
-                  <Button className="w-full" size="sm">View Offer</Button>
+                  <Button className="w-full" size="sm">
+                    View Offer
+                  </Button>
                 </div>
               ))}
             </div>
@@ -468,9 +576,12 @@ const Dashboard = () => {
             <div className="flex items-start gap-3">
               <AlertCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
               <div>
-                <h4 className="font-semibold text-sm mb-1">Risk Management Tip</h4>
+                <h4 className="font-semibold text-sm mb-1">
+                  Risk Management Tip
+                </h4>
                 <p className="text-xs text-muted-foreground">
-                  Your current leverage is high. Consider reducing position sizes to maintain healthy risk levels.
+                  Your current leverage is high. Consider reducing position
+                  sizes to maintain healthy risk levels.
                 </p>
               </div>
             </div>

@@ -1,32 +1,45 @@
 import { currentUser, pnlHistory, recentTrades } from "@/data/mockData";
 import StatsCard from "@/components/StatsCard";
 import { TrendingUp, Target, Clock, BarChart3, Award, Zap } from "lucide-react";
-import { 
-  LineChart, 
-  Line, 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
+import {
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
   ResponsiveContainer,
   PieChart,
   Pie,
-  Cell
+  Cell,
 } from "recharts";
 import { motion } from "framer-motion";
 
 const Analytics = () => {
   const winLossData = [
-    { name: "Wins", value: Math.floor(currentUser.totalTrades * (currentUser.winRate / 100)), fill: "hsl(var(--success))" },
-    { name: "Losses", value: Math.floor(currentUser.totalTrades * (1 - currentUser.winRate / 100)), fill: "hsl(var(--loss))" },
+    {
+      name: "Wins",
+      value: Math.floor(currentUser.totalTrades * (currentUser.winRate / 100)),
+      fill: "hsl(var(--success))",
+    },
+    {
+      name: "Losses",
+      value: Math.floor(
+        currentUser.totalTrades * (1 - currentUser.winRate / 100)
+      ),
+      fill: "hsl(var(--loss))",
+    },
   ];
 
-  const tradesByPair = recentTrades.reduce((acc, trade) => {
-    acc[trade.pair] = (acc[trade.pair] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
+  const tradesByPair = recentTrades.reduce(
+    (acc, trade) => {
+      acc[trade.pair] = (acc[trade.pair] || 0) + 1;
+      return acc;
+    },
+    {} as Record<string, number>
+  );
 
   const pairData = Object.entries(tradesByPair).map(([pair, count]) => ({
     pair,
@@ -91,26 +104,34 @@ const Analytics = () => {
           <h3 className="text-lg font-semibold mb-4">P&L Over Time</h3>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={pnlHistory}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-              <XAxis 
-                dataKey="date" 
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="hsl(var(--border))"
+              />
+              <XAxis
+                dataKey="date"
                 stroke="hsl(var(--muted-foreground))"
-                tickFormatter={(date) => new Date(date).toLocaleDateString([], { month: 'short', day: 'numeric' })}
+                tickFormatter={date =>
+                  new Date(date).toLocaleDateString([], {
+                    month: "short",
+                    day: "numeric",
+                  })
+                }
               />
               <YAxis stroke="hsl(var(--muted-foreground))" />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: 'hsl(var(--card))', 
-                  border: '1px solid hsl(var(--border))',
-                  borderRadius: '8px'
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "hsl(var(--card))",
+                  border: "1px solid hsl(var(--border))",
+                  borderRadius: "8px",
                 }}
               />
-              <Line 
-                type="monotone" 
-                dataKey="pnl" 
-                stroke="hsl(var(--primary))" 
+              <Line
+                type="monotone"
+                dataKey="pnl"
+                stroke="hsl(var(--primary))"
                 strokeWidth={3}
-                dot={{ fill: 'hsl(var(--primary))' }}
+                dot={{ fill: "hsl(var(--primary))" }}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -150,14 +171,18 @@ const Analytics = () => {
                 <div className="w-3 h-3 rounded-full bg-success" />
                 <span className="text-sm text-muted-foreground">Wins</span>
               </div>
-              <p className="text-2xl font-bold text-success mt-1">{winLossData[0].value}</p>
+              <p className="text-2xl font-bold text-success mt-1">
+                {winLossData[0].value}
+              </p>
             </div>
             <div className="text-center">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-loss" />
                 <span className="text-sm text-muted-foreground">Losses</span>
               </div>
-              <p className="text-2xl font-bold text-loss mt-1">{winLossData[1].value}</p>
+              <p className="text-2xl font-bold text-loss mt-1">
+                {winLossData[1].value}
+              </p>
             </div>
           </div>
         </motion.div>
@@ -175,17 +200,24 @@ const Analytics = () => {
           <h3 className="text-lg font-semibold mb-4">Trades by Pair</h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={pairData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="hsl(var(--border))"
+              />
               <XAxis dataKey="pair" stroke="hsl(var(--muted-foreground))" />
               <YAxis stroke="hsl(var(--muted-foreground))" />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: 'hsl(var(--card))', 
-                  border: '1px solid hsl(var(--border))',
-                  borderRadius: '8px'
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "hsl(var(--card))",
+                  border: "1px solid hsl(var(--border))",
+                  borderRadius: "8px",
                 }}
               />
-              <Bar dataKey="count" fill="hsl(var(--primary))" radius={[8, 8, 0, 0]} />
+              <Bar
+                dataKey="count"
+                fill="hsl(var(--primary))"
+                radius={[8, 8, 0, 0]}
+              />
             </BarChart>
           </ResponsiveContainer>
         </motion.div>
@@ -248,17 +280,25 @@ const Analytics = () => {
         <div className="space-y-3">
           <div className="p-4 bg-success/5 border border-success/20 rounded-lg">
             <p className="text-sm">
-              <span className="font-semibold text-success">✓ Strong Performance:</span> Your win rate of {currentUser.winRate}% is above the platform average of 64.2%
+              <span className="font-semibold text-success">
+                ✓ Strong Performance:
+              </span>{" "}
+              Your win rate of {currentUser.winRate}% is above the platform
+              average of 64.2%
             </p>
           </div>
           <div className="p-4 bg-primary/5 border border-primary/20 rounded-lg">
             <p className="text-sm">
-              <span className="font-semibold text-primary">→ Opportunity:</span> Consider increasing position sizes on BTCUSDT trades where you have an 85% win rate
+              <span className="font-semibold text-primary">→ Opportunity:</span>{" "}
+              Consider increasing position sizes on BTCUSDT trades where you
+              have an 85% win rate
             </p>
           </div>
           <div className="p-4 bg-accent/5 border border-accent/20 rounded-lg">
             <p className="text-sm">
-              <span className="font-semibold text-accent">★ Milestone:</span> You're just 2 spots away from breaking into the top 10 on the leaderboard!
+              <span className="font-semibold text-accent">★ Milestone:</span>{" "}
+              You're just 2 spots away from breaking into the top 10 on the
+              leaderboard!
             </p>
           </div>
         </div>

@@ -28,7 +28,7 @@ const Challenges = () => {
       id: 3,
       title: "Profit Seeker",
       description: "Achieve $500 P&L in a single week",
-      progress: 245.50,
+      progress: 245.5,
       target: 500,
       reward: "750 Points",
       timeLeft: "4 days",
@@ -75,8 +75,9 @@ const Challenges = () => {
         <h2 className="text-xl font-bold mb-4">Active Challenges</h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {activeChallenges.map((challenge, index) => {
-            const progressPercent = (challenge.progress / challenge.target) * 100;
-            
+            const progressPercent =
+              (challenge.progress / challenge.target) * 100;
+
             return (
               <motion.div
                 key={challenge.id}
@@ -87,16 +88,22 @@ const Challenges = () => {
               >
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h3 className="text-lg font-bold mb-1">{challenge.title}</h3>
+                    <h3 className="text-lg font-bold mb-1">
+                      {challenge.title}
+                    </h3>
                     <p className="text-sm text-muted-foreground">
                       {challenge.description}
                     </p>
                   </div>
-                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                    challenge.difficulty === "Easy" ? "bg-success/20 text-success" :
-                    challenge.difficulty === "Medium" ? "bg-primary/20 text-primary" :
-                    "bg-loss/20 text-loss"
-                  }`}>
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      challenge.difficulty === "Easy"
+                        ? "bg-success/20 text-success"
+                        : challenge.difficulty === "Medium"
+                          ? "bg-primary/20 text-primary"
+                          : "bg-loss/20 text-loss"
+                    }`}
+                  >
                     {challenge.difficulty}
                   </span>
                 </div>
@@ -109,7 +116,7 @@ const Challenges = () => {
                     </span>
                   </div>
                   <div className="w-full bg-muted rounded-full h-3">
-                    <div 
+                    <div
                       className="bg-gradient-to-r from-primary to-secondary h-3 rounded-full transition-all"
                       style={{ width: `${progressPercent}%` }}
                     />
@@ -156,11 +163,15 @@ const Challenges = () => {
                     {challenge.description}
                   </p>
                 </div>
-                <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                  challenge.difficulty === "Easy" ? "bg-success/20 text-success" :
-                  challenge.difficulty === "Medium" ? "bg-primary/20 text-primary" :
-                  "bg-loss/20 text-loss"
-                }`}>
+                <span
+                  className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                    challenge.difficulty === "Easy"
+                      ? "bg-success/20 text-success"
+                      : challenge.difficulty === "Medium"
+                        ? "bg-primary/20 text-primary"
+                        : "bg-loss/20 text-loss"
+                  }`}
+                >
                   {challenge.difficulty}
                 </span>
               </div>
@@ -168,7 +179,9 @@ const Challenges = () => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1 text-accent">
                   <Trophy className="w-4 h-4" />
-                  <span className="font-semibold text-sm">{challenge.reward}</span>
+                  <span className="font-semibold text-sm">
+                    {challenge.reward}
+                  </span>
                 </div>
                 <Button size="sm" variant="outline" disabled>
                   Coming Soon
@@ -189,12 +202,10 @@ const Challenges = () => {
         <Zap className="w-16 h-16 text-primary mx-auto mb-4" />
         <h2 className="text-2xl font-bold mb-2">Compete for Glory</h2>
         <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-          Complete challenges to earn success points and climb the global leaderboard. 
-          Top performers get exclusive funding opportunities!
+          Complete challenges to earn success points and climb the global
+          leaderboard. Top performers get exclusive funding opportunities!
         </p>
-        <Button className="glow-primary">
-          View Leaderboard
-        </Button>
+        <Button className="glow-primary">View Leaderboard</Button>
       </motion.div>
     </div>
   );

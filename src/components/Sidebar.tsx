@@ -1,13 +1,13 @@
 import { Link, useLocation } from "react-router-dom";
-import { 
-  LayoutDashboard, 
-  TrendingUp, 
-  BarChart3, 
-  Trophy, 
-  Briefcase, 
+import {
+  LayoutDashboard,
+  TrendingUp,
+  BarChart3,
+  Trophy,
+  Briefcase,
   Settings,
   Users,
-  Target
+  Target,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -32,7 +32,7 @@ const Sidebar = () => {
     <aside className=" w-64 glass border-r border-border/50 hidden lg:flex flex-col">
       <div className="flex-1 overflow-y-auto py-6">
         <nav className="space-y-1 px-3">
-          {navItems.map((item) => {
+          {navItems.map(item => {
             const isActive = location.pathname === item.path;
             const Icon = item.icon;
 
@@ -47,7 +47,12 @@ const Sidebar = () => {
                     : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
                 )}
               >
-                <Icon className={cn("w-5 h-5 transition-transform group-hover:scale-110", isActive && "text-primary")} />
+                <Icon
+                  className={cn(
+                    "w-5 h-5 transition-transform group-hover:scale-110",
+                    isActive && "text-primary"
+                  )}
+                />
                 <span className="font-medium">{item.label}</span>
               </Link>
             );

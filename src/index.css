@@ -54,9 +54,21 @@ All colors MUST be HSL.
     --glass-border: 240 6% 18% / 0.4;
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(243 75% 59%), hsl(270 70% 60%));
-    --gradient-glow: linear-gradient(135deg, hsl(243 75% 59% / 0.2), hsl(270 70% 60% / 0.2));
-    --gradient-success: linear-gradient(90deg, hsl(142 76% 36%), hsl(142 76% 46%));
+    --gradient-primary: linear-gradient(
+      135deg,
+      hsl(243 75% 59%),
+      hsl(270 70% 60%)
+    );
+    --gradient-glow: linear-gradient(
+      135deg,
+      hsl(243 75% 59% / 0.2),
+      hsl(270 70% 60% / 0.2)
+    );
+    --gradient-success: linear-gradient(
+      90deg,
+      hsl(142 76% 36%),
+      hsl(142 76% 46%)
+    );
     --gradient-loss: linear-gradient(90deg, hsl(0 72% 51%), hsl(0 72% 61%));
 
     /* Shadows & Glows */

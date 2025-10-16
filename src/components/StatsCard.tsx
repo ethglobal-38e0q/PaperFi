@@ -12,14 +12,14 @@ interface StatsCardProps {
   className?: string;
 }
 
-const StatsCard = ({ 
-  title, 
-  value, 
-  change, 
-  icon: Icon, 
+const StatsCard = ({
+  title,
+  value,
+  change,
+  icon: Icon,
   trend = "neutral",
   subtitle,
-  className 
+  className,
 }: StatsCardProps) => {
   const getTrendColor = () => {
     if (trend === "up") return "text-success";
@@ -35,7 +35,8 @@ const StatsCard = ({
           <p className="text-3xl font-bold mb-1">{value}</p>
           {change !== undefined && (
             <p className={cn("text-sm font-medium", getTrendColor())}>
-              {change > 0 ? "+" : ""}{change}%
+              {change > 0 ? "+" : ""}
+              {change}%
             </p>
           )}
           {subtitle && (
@@ -43,12 +44,14 @@ const StatsCard = ({
           )}
         </div>
         {Icon && (
-          <div className={cn(
-            "w-12 h-12 rounded-lg flex items-center justify-center",
-            trend === "up" && "bg-success/10 text-success",
-            trend === "down" && "bg-loss/10 text-loss",
-            trend === "neutral" && "bg-primary/10 text-primary"
-          )}>
+          <div
+            className={cn(
+              "w-12 h-12 rounded-lg flex items-center justify-center",
+              trend === "up" && "bg-success/10 text-success",
+              trend === "down" && "bg-loss/10 text-loss",
+              trend === "neutral" && "bg-primary/10 text-primary"
+            )}
+          >
             <Icon className="w-6 h-6" />
           </div>
         )}

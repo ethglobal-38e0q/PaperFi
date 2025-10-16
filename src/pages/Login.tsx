@@ -74,7 +74,7 @@ const Login = () => {
                 placeholder="your@email.com"
                 className="pl-10"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={e => setEmail(e.target.value)}
                 required
               />
             </div>
@@ -90,7 +90,7 @@ const Login = () => {
                 placeholder="••••••••"
                 className="pl-10"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={e => setPassword(e.target.value)}
                 required
               />
             </div>
@@ -101,7 +101,10 @@ const Login = () => {
               <input type="checkbox" className="rounded border-border" />
               <span className="text-muted-foreground">Remember me</span>
             </label>
-            <Link to="/forgot-password" className="text-primary hover:underline">
+            <Link
+              to="/forgot-password"
+              className="text-primary hover:underline"
+            >
               Forgot password?
             </Link>
           </div>
@@ -116,7 +119,9 @@ const Login = () => {
             <div className="w-full border-t border-border"></div>
           </div>
           <div className="relative flex justify-center text-xs">
-            <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+            <span className="bg-card px-2 text-muted-foreground">
+              Or continue with
+            </span>
           </div>
         </div>
 
@@ -124,7 +129,10 @@ const Login = () => {
 
         <p className="text-center text-sm text-muted-foreground mt-6">
           Don't have an account?{" "}
-          <Link to="/signup" className="text-primary font-semibold hover:underline">
+          <Link
+            to="/signup"
+            className="text-primary font-semibold hover:underline"
+          >
             Sign up
           </Link>
         </p>

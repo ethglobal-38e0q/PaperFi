@@ -18,8 +18,11 @@ const Leaderboard = () => {
   };
 
   const getMedalIcon = (rank: number) => {
-    if (rank <= 3) return <Medal className={`w-6 h-6 ${getMedalColor(rank)}`} />;
-    return <span className="text-lg font-bold text-muted-foreground">#{rank}</span>;
+    if (rank <= 3)
+      return <Medal className={`w-6 h-6 ${getMedalColor(rank)}`} />;
+    return (
+      <span className="text-lg font-bold text-muted-foreground">#{rank}</span>
+    );
   };
 
   const filteredLeaderboard = leaderboard.filter(trader =>
@@ -48,7 +51,7 @@ const Leaderboard = () => {
         <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
           {/* Timeframe */}
           <div className="flex gap-2">
-            {["7d", "30d", "all-time"].map((tf) => (
+            {["7d", "30d", "all-time"].map(tf => (
               <Button
                 key={tf}
                 variant={timeframe === tf ? "default" : "outline"}
@@ -68,7 +71,7 @@ const Leaderboard = () => {
               placeholder="Search traders..."
               className="pl-10"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={e => setSearchQuery(e.target.value)}
             />
           </div>
         </div>

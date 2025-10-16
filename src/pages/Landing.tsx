@@ -1,6 +1,14 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, Shield, Target, Users, Award, Zap, ArrowRight } from "lucide-react";
+import {
+  TrendingUp,
+  Shield,
+  Target,
+  Users,
+  Award,
+  Zap,
+  ArrowRight,
+} from "lucide-react";
 import { motion } from "framer-motion";
 import { platformStats } from "@/data/mockData";
 
@@ -9,7 +17,8 @@ const Landing = () => {
     {
       icon: Shield,
       title: "Real Market Feeds, No Risk",
-      description: "Practice with live market data without risking real capital",
+      description:
+        "Practice with live market data without risking real capital",
     },
     {
       icon: Target,
@@ -19,7 +28,8 @@ const Landing = () => {
     {
       icon: Users,
       title: "Get Funded by Real Clients",
-      description: "Top performers get funding opportunities from capital providers",
+      description:
+        "Top performers get funding opportunities from capital providers",
     },
   ];
 
@@ -32,7 +42,9 @@ const Landing = () => {
             <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center glow-primary">
               <TrendingUp className="w-5 h-5 text-white" />
             </div>
-            <span className="text-xl font-bold gradient-text">PerpPractice</span>
+            <span className="text-xl font-bold gradient-text">
+              PerpPractice
+            </span>
           </Link>
 
           <div className="flex items-center gap-4">
@@ -60,8 +72,8 @@ const Landing = () => {
               Get Funded.
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Master perpetuals trading in a risk-free environment with real market data. 
-              Prove your skills and get funded by real clients.
+              Master perpetuals trading in a risk-free environment with real
+              market data. Prove your skills and get funded by real clients.
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link to="/app/dashboard">
@@ -85,15 +97,21 @@ const Landing = () => {
             className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-20 max-w-4xl mx-auto"
           >
             <div className="glass-hover p-6 rounded-xl">
-              <div className="text-4xl font-bold gradient-text mb-2">{platformStats.totalVolume}</div>
+              <div className="text-4xl font-bold gradient-text mb-2">
+                {platformStats.totalVolume}
+              </div>
               <div className="text-muted-foreground">Simulated Volume</div>
             </div>
             <div className="glass-hover p-6 rounded-xl">
-              <div className="text-4xl font-bold gradient-text mb-2">{platformStats.activeTraders.toLocaleString()}</div>
+              <div className="text-4xl font-bold gradient-text mb-2">
+                {platformStats.activeTraders.toLocaleString()}
+              </div>
               <div className="text-muted-foreground">Active Traders</div>
             </div>
             <div className="glass-hover p-6 rounded-xl">
-              <div className="text-4xl font-bold gradient-text mb-2">${platformStats.fundsAllocated}</div>
+              <div className="text-4xl font-bold gradient-text mb-2">
+                ${platformStats.fundsAllocated}
+              </div>
               <div className="text-muted-foreground">Funds Allocated</div>
             </div>
           </motion.div>
@@ -149,7 +167,9 @@ const Landing = () => {
           >
             <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10" />
             <div className="relative z-10">
-              <h2 className="text-4xl font-bold mb-4">Ready to Start Trading?</h2>
+              <h2 className="text-4xl font-bold mb-4">
+                Ready to Start Trading?
+              </h2>
               <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
                 Join thousands of traders improving their skills every day
               </p>
@@ -170,33 +190,117 @@ const Landing = () => {
             <div>
               <h4 className="font-semibold mb-4">Product</h4>
               <ul className="space-y-2 text-muted-foreground">
-                <li><Link to="#" className="hover:text-foreground transition-colors">Features</Link></li>
-                <li><Link to="#" className="hover:text-foreground transition-colors">Pricing</Link></li>
-                <li><Link to="#" className="hover:text-foreground transition-colors">FAQ</Link></li>
+                <li>
+                  <Link
+                    to="#"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    Features
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="#"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    Pricing
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="#"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    FAQ
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Company</h4>
               <ul className="space-y-2 text-muted-foreground">
-                <li><Link to="#" className="hover:text-foreground transition-colors">About</Link></li>
-                <li><Link to="#" className="hover:text-foreground transition-colors">Blog</Link></li>
-                <li><Link to="#" className="hover:text-foreground transition-colors">Careers</Link></li>
+                <li>
+                  <Link
+                    to="#"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    About
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="#"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    Blog
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="#"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    Careers
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Resources</h4>
               <ul className="space-y-2 text-muted-foreground">
-                <li><Link to="#" className="hover:text-foreground transition-colors">Docs</Link></li>
-                <li><Link to="#" className="hover:text-foreground transition-colors">Support</Link></li>
-                <li><Link to="#" className="hover:text-foreground transition-colors">Privacy</Link></li>
+                <li>
+                  <Link
+                    to="#"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    Docs
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="#"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    Support
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="#"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    Privacy
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Connect</h4>
               <ul className="space-y-2 text-muted-foreground">
-                <li><Link to="#" className="hover:text-foreground transition-colors">Twitter</Link></li>
-                <li><Link to="#" className="hover:text-foreground transition-colors">Discord</Link></li>
-                <li><Link to="#" className="hover:text-foreground transition-colors">Contact</Link></li>
+                <li>
+                  <Link
+                    to="#"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    Twitter
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="#"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    Discord
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="#"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    Contact
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>

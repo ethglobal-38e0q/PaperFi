@@ -100,8 +100,8 @@ const Clients = () => {
           >
             {/* Trader Header */}
             <div className="flex items-center gap-4 mb-4">
-              <img 
-                src={trader.avatar} 
+              <img
+                src={trader.avatar}
                 alt={trader.name}
                 className="w-16 h-16 rounded-full ring-2 ring-primary/30"
               />
@@ -147,7 +147,7 @@ const Clients = () => {
                 </span>
               </div>
               <div className="w-full bg-muted rounded-full h-2">
-                <div 
+                <div
                   className="bg-gradient-to-r from-primary to-secondary h-2 rounded-full transition-all"
                   style={{ width: `${Math.min(trader.pnlPercent, 100)}%` }}
                 />

@@ -5,6 +5,7 @@ A fully responsive, production-ready frontend for a simulated perpetuals trading
 ## 🚀 Features
 
 ### Core Platform Features
+
 - **Landing Page** - Hero section with animated stats, features showcase, and CTAs
 - **Authentication** - Login/Signup pages with wallet connection support
 - **Trading Terminal** - Real-time simulated trading interface with live charts
@@ -17,6 +18,7 @@ A fully responsive, production-ready frontend for a simulated perpetuals trading
 - **Settings** - Complete profile and preference management
 
 ### Design & UX
+
 - Dark theme with electric blue/purple neon accents
 - Glassmorphism effects and subtle glows
 - Smooth Framer Motion animations
@@ -26,6 +28,7 @@ A fully responsive, production-ready frontend for a simulated perpetuals trading
 - Real-time data simulations
 
 ### Technical Highlights
+
 - **React 18** with TypeScript
 - **TailwindCSS** with custom design system
 - **Recharts** for data visualizations
@@ -69,6 +72,7 @@ src/
 ## 🎨 Design System
 
 All colors are defined as HSL variables in `src/index.css`:
+
 - **Primary**: Electric blue (`hsl(243 75% 59%)`)
 - **Secondary**: Deep purple (`hsl(270 70% 60%)`)
 - **Accent**: Teal (`hsl(174 72% 56%)`)
@@ -76,6 +80,7 @@ All colors are defined as HSL variables in `src/index.css`:
 - **Loss**: Red (`hsl(0 72% 51%)`)
 
 Custom utility classes:
+
 - `.glass` - Glassmorphism effect
 - `.glass-hover` - Interactive glass panel
 - `.glow-primary` - Primary color glow
@@ -86,6 +91,7 @@ Custom utility classes:
 ## 🛠️ Development
 
 ### Prerequisites
+
 - Node.js 16+
 - npm or yarn
 
@@ -116,6 +122,7 @@ npm run build
 ## 📊 Mock Data
 
 The platform uses comprehensive mock data defined in `src/data/mockData.ts`:
+
 - User profile information
 - Trading history (P&L, trades, positions)
 - Market data (prices, volumes)
@@ -128,12 +135,14 @@ All data is designed to simulate a real trading environment for demonstration pu
 ## 🎯 Key Pages
 
 ### Landing Page (`/`)
+
 - Hero section with platform tagline
 - Animated statistics
 - Features showcase
 - Footer with links
 
 ### Dashboard (`/app/dashboard`)
+
 - Quick stats cards (P&L, Win Rate, Streak, Rank)
 - Activity heatmap
 - Weekly P&L chart
@@ -141,6 +150,7 @@ All data is designed to simulate a real trading environment for demonstration pu
 - Funding offers
 
 ### Trade Terminal (`/app/trade`)
+
 - Real-time price charts
 - Order panel (Long/Short)
 - Market selector
@@ -148,6 +158,7 @@ All data is designed to simulate a real trading environment for demonstration pu
 - Trade history
 
 ### Analytics (`/app/analytics`)
+
 - Performance metrics
 - P&L over time chart
 - Win/loss ratio pie chart
@@ -156,6 +167,7 @@ All data is designed to simulate a real trading environment for demonstration pu
 - AI insights
 
 ### Leaderboard (`/app/leaderboard`)
+
 - Global rankings
 - Timeframe filters
 - Trader search
@@ -169,11 +181,12 @@ All data is designed to simulate a real trading environment for demonstration pu
 3. Enters credentials or connects wallet
 4. Redirected to Dashboard
 
-*Note: Current implementation is mock authentication. Integrate with your backend for production.*
+_Note: Current implementation is mock authentication. Integrate with your backend for production._
 
 ## 🚢 Deployment
 
 This project is ready to deploy to:
+
 - Vercel
 - Netlify
 - Cloudflare Pages
@@ -184,6 +197,7 @@ Simply connect your Git repository and deploy!
 ## 🎨 UI Components
 
 Built with Shadcn UI components:
+
 - Buttons, Inputs, Labels
 - Cards, Tabs, Tooltips
 - Dialogs, Dropdowns
@@ -216,4 +230,3 @@ This project is built for demonstration purposes.
 This is a frontend showcase project. Feel free to fork and customize for your needs.
 
 ---
-
