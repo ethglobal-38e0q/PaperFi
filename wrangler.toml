@@ -1,6 +1,5 @@
 # Top-level configuration
 name = "papersol"
-main = "src/main.jsx"
 compatibility_date = "2025-01-01"
 
 workers_dev = false
