@@ -25,7 +25,7 @@ const Heatmap = () => {
   return (
     <div className="glass p-6 rounded-xl">
       <h3 className="text-lg font-semibold mb-4">Trading Activity</h3>
-      <div className="flex gap-1 overflow-x-auto">
+      <div className="flex justify-around overflow-x-auto">
         {weeks.map((week, weekIndex) => (
           <div key={weekIndex} className="flex flex-col gap-1">
             {week.map((day, dayIndex) => (
