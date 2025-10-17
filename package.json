@@ -10,9 +10,12 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "deploy": "vite build && wrangler deploy"
   },
   "dependencies": {
+    "@cloudflare/vite-plugin": "^1.13.13",
+    "@tailwindcss/vite": "^4.1.14",
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-alert-dialog": "^1.1.14",
