@@ -1,0 +1,53 @@
+# Dependencies
+node_modules/
+package-lock.json
+bun.lockb
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# Generated files
+*.generated.*
+*.min.js
+*.min.css
+
+# Logs
+*.log
+logs/
+
+# Environment files
+.env
+.env.local
+.env.production
+.env.staging
+
+# Cache directories
+.cache/
+.parcel-cache/
+.wrangler/
+
+# IDE files
+.vscode/
+.idea/
+
+# Git
+.git/
+
+# Coverage
+coverage/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Public assets that shouldn't be formatted
+public/
+static/
+
+# Config files that have specific formatting requirements
+tailwind.config.*
+postcss.config.*
+vite.config.*

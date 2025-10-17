@@ -1,9 +1,9 @@
 # Top-level configuration
-name = "papersol"
+name = "paper-perp"
 compatibility_date = "2025-01-01"
 
 workers_dev = false
 
 [assets]
 not_found_handling = "single-page-application"
-directory = "./src/assets/"
+directory = "./dist/assets/"
