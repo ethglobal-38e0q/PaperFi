@@ -19,6 +19,7 @@ import Challenges from "./pages/Challenges";
 import NotFound from "./pages/NotFound";
 import AppLayout from "./pages/app";
 import { Web3Provider } from "./contexts/Web3Provider";
+import Launchpad from "./pages/app/Launchpad/Launchpad";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ const App = () => (
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/app" element={<AppLayout />}>
+                  <Route path="launchpad" element={<Launchpad />} />
                   <Route path="dashboard" element={<Dashboard />} />
                   <Route path="trade" element={<Trade />} />
                   <Route path="analytics" element={<Analytics />} />
