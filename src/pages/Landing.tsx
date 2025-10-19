@@ -51,7 +51,7 @@ const Landing = () => {
             <Link to="/login">
               <Button variant="ghost">Login</Button>
             </Link>
-            <Link to="/signup">
+            <Link to="/login">
               <Button className="glow-primary">Get Started</Button>
             </Link>
           </div>
@@ -76,7 +76,7 @@ const Landing = () => {
               market data. Prove your skills and get funded by real clients.
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
-              <Link to="/app/dashboard">
+              <Link to="/login">
                 <Button size="lg" className="gap-2 glow-primary text-lg px-8">
                   Start Practicing <ArrowRight className="w-5 h-5" />
                 </Button>

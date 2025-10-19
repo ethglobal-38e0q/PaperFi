@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TrendingUp, Mail, Lock, Wallet } from "lucide-react";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ConnectKitButton } from "connectkit";
 import { useAuth } from "@/contexts/AuthProvider";
 import { generateSignInMessage } from "@/lib/supabase";
@@ -13,10 +13,14 @@ import { toast } from "@/hooks/use-toast";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const { supabase, walletAddress } = useAuth();
+  const { supabase, walletAddress, user } = useAuth();
   const { signMessageAsync } = useSignMessage();
+
+  useEffect(() => {
+    if (user && walletAddress) {
+      navigate("/app/dashboard");
+    }
+  }, [user, walletAddress]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

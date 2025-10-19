@@ -21,6 +21,7 @@ import AppLayout from "./pages/app";
 import { Web3Provider } from "./contexts/Web3Provider";
 import Launchpad from "./pages/app/Launchpad/Launchpad";
 import { AuthProvider } from "./contexts/AuthProvider";
+import { OnboardCard } from "./components/OnboardingCard";
 
 const queryClient = new QueryClient();
 
@@ -54,6 +55,7 @@ const App = () => (
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </div>
+              <OnboardCard />
             </div>
           </AuthProvider>
         </BrowserRouter>
