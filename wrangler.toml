@@ -8,6 +8,10 @@ r2_buckets = [
   { binding = "R2", bucket_name = "paper" }
 ]
 
+[observability]
+enabled = true
+head_sampling_rate = 1
+
 [assets]
 not_found_handling = "single-page-application"
 directory = "./dist/assets/"
