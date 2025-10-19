@@ -6,16 +6,41 @@ import { TrendingUp, Mail, Lock, Wallet } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { ConnectKitButton } from "connectkit";
+import { useAuth } from "@/contexts/AuthProvider";
+import { generateSignInMessage } from "@/lib/supabase";
+import { useSignMessage } from "wagmi";
+import { toast } from "@/hooks/use-toast";
 
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { supabase, walletAddress } = useAuth();
+  const { signMessageAsync } = useSignMessage();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Mock login - in real app, authenticate here
-    navigate("/app/dashboard");
+    const message = generateSignInMessage(walletAddress);
+
+    // Request signature from wallet
+    const signature = await signMessageAsync({
+      message,
+      account: walletAddress,
+    });
+
+    const { data, error } = await supabase.auth.signInWithWeb3({
+      chain: "ethereum",
+      message: message,
+      signature: signature,
+    });
+
+    if (error) throw error;
+
+    const authUser = data.user;
+    if (authUser) {
+      toast({ title: "Successfully authenticated with wallet!" });
+      navigate("/app/dashboard");
+    }
   };
 
   return (
@@ -63,7 +88,7 @@ const Login = () => {
           Sign in to continue trading
         </p>
 
-        <form onSubmit={handleLogin} className="space-y-4">
+        {/*<form onSubmit={handleLogin} className="space-y-4">
           <div>
             <Label htmlFor="email">Email</Label>
             <div className="relative mt-2">
@@ -123,9 +148,10 @@ const Login = () => {
               Or continue with
             </span>
           </div>
+        </div>*/}
+        <div className="place-self-center">
+          <ConnectKitButton label="Connect wallet to sign in" />
         </div>
-
-        <ConnectKitButton />
 
         <p className="text-center text-sm text-muted-foreground mt-6">
           Don't have an account?{" "}

@@ -8,11 +8,13 @@ import {
   Settings,
   Users,
   Target,
+  Search,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/app/dashboard" },
+  { icon: Search, label: "Launchpad", path: "/app/launchpad" },
   { icon: TrendingUp, label: "Trade", path: "/app/trade" },
   { icon: BarChart3, label: "Analytics", path: "/app/analytics" },
   { icon: Trophy, label: "Leaderboard", path: "/app/leaderboard" },

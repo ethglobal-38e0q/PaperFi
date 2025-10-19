@@ -20,6 +20,7 @@ import NotFound from "./pages/NotFound";
 import AppLayout from "./pages/app";
 import { Web3Provider } from "./contexts/Web3Provider";
 import Launchpad from "./pages/app/Launchpad/Launchpad";
+import { AuthProvider } from "./contexts/AuthProvider";
 
 const queryClient = new QueryClient();
 
@@ -30,29 +31,31 @@ const App = () => (
       <Sonner />
       <Web3Provider>
         <BrowserRouter>
-          <div className="h-screen w-full">
-            <Navbar />
-            <div className="pt-16 h-full">
-              <Routes>
-                <Route path="/" element={<Landing />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/app" element={<AppLayout />}>
-                  <Route path="launchpad" element={<Launchpad />} />
-                  <Route path="dashboard" element={<Dashboard />} />
-                  <Route path="trade" element={<Trade />} />
-                  <Route path="analytics" element={<Analytics />} />
-                  <Route path="leaderboard" element={<Leaderboard />} />
-                  <Route path="portfolio" element={<Portfolio />} />
-                  <Route path="settings" element={<Settings />} />
-                  <Route path="clients" element={<Clients />} />
-                  <Route path="challenges" element={<Challenges />} />
-                </Route>
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+          <AuthProvider>
+            <div className="h-screen w-full">
+              <Navbar />
+              <div className="pt-16 h-full">
+                <Routes>
+                  <Route path="/" element={<Landing />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<Signup />} />
+                  <Route path="/app" element={<AppLayout />}>
+                    <Route path="launchpad" element={<Launchpad />} />
+                    <Route path="dashboard" element={<Dashboard />} />
+                    <Route path="trade" element={<Trade />} />
+                    <Route path="analytics" element={<Analytics />} />
+                    <Route path="leaderboard" element={<Leaderboard />} />
+                    <Route path="portfolio" element={<Portfolio />} />
+                    <Route path="settings" element={<Settings />} />
+                    <Route path="clients" element={<Clients />} />
+                    <Route path="challenges" element={<Challenges />} />
+                  </Route>
+                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </div>
             </div>
-          </div>
+          </AuthProvider>
         </BrowserRouter>
       </Web3Provider>
     </TooltipProvider>

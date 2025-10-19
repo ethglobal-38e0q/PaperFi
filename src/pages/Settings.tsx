@@ -1,4 +1,3 @@
-import { currentUser } from "@/data/mockData";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,10 +8,43 @@ import {
   Bell,
   Shield,
   Palette,
+  Wallet,
+  Copy,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { useAuth } from "@/contexts/AuthProvider";
+import { useState } from "react";
+import { toast } from "sonner";
+import { Web3ConnectButton } from "@/components/Web3ConnectButton";
+import { useAccount } from "wagmi";
 
 const Settings = () => {
+  const { profile, updateProfile, isLoading } = useAuth();
+  const { address } = useAccount();
+  const [formData, setFormData] = useState({
+    username: profile?.username || "",
+    email: profile?.email || "",
+  });
+
+  const handleUpdateProfile = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await updateProfile(formData);
+    } catch (error) {
+      console.error("Failed to update profile:", error);
+    }
+  };
+
+  const copyAddress = () => {
+    if (address) {
+      navigator.clipboard.writeText(address);
+      toast.success("Wallet address copied!");
+    }
+  };
+
+  const formatAddress = (address: string) => {
+    return `${address.slice(0, 6)}...${address.slice(-4)}`;
+  };
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
@@ -60,52 +92,90 @@ const Settings = () => {
           {/* Profile Tab */}
           <TabsContent value="profile" className="space-y-6">
             <div className="flex items-center gap-6">
-              <img
-                src={currentUser.avatar}
-                alt={currentUser.username}
-                className="w-24 h-24 rounded-full ring-4 ring-primary/30"
-              />
+              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center ring-4 ring-primary/30">
+                <span className="text-3xl font-bold text-white">
+                  {profile?.username?.charAt(0).toUpperCase() ||
+                    profile?.wallet_address?.charAt(2).toUpperCase() ||
+                    "U"}
+                </span>
+              </div>
               <div>
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" disabled>
                   Change Avatar
                 </Button>
                 <p className="text-xs text-muted-foreground mt-2">
-                  JPG, PNG or GIF. Max size 2MB
+                  Avatar customization coming soon
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <Label htmlFor="username">Username</Label>
-                <Input
-                  id="username"
-                  defaultValue={currentUser.username}
-                  className="mt-2"
-                />
+            <form onSubmit={handleUpdateProfile} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <Label htmlFor="username">Username</Label>
+                  <Input
+                    id="username"
+                    value={formData.username}
+                    onChange={e =>
+                      setFormData({ ...formData, username: e.target.value })
+                    }
+                    className="mt-2"
+                    placeholder="Enter username"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={e =>
+                      setFormData({ ...formData, email: e.target.value })
+                    }
+                    className="mt-2"
+                    placeholder="Enter email address"
+                  />
+                </div>
               </div>
+
               <div>
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  defaultValue={currentUser.email}
-                  className="mt-2"
-                />
+                <Label htmlFor="wallet-address">Wallet Address</Label>
+                <div className="flex items-center gap-2 mt-2">
+                  <Input
+                    id="wallet-address"
+                    value={address || "Not connected"}
+                    className="font-mono"
+                    readOnly
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    onClick={copyAddress}
+                    disabled={!address}
+                  >
+                    <Copy className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
-            </div>
 
-            <div>
-              <Label htmlFor="bio">Bio</Label>
-              <textarea
-                id="bio"
-                className="w-full mt-2 p-3 bg-muted/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
-                rows={4}
-                placeholder="Tell us about your trading journey..."
-              />
-            </div>
+              <div>
+                <Label>Account Created</Label>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  {profile?.created_at
+                    ? new Date(profile.created_at).toLocaleDateString()
+                    : "N/A"}
+                </p>
+              </div>
 
-            <Button className="glow-primary">Save Changes</Button>
+              <Button
+                type="submit"
+                className="glow-primary"
+                disabled={isLoading}
+              >
+                {isLoading ? "Saving..." : "Save Changes"}
+              </Button>
+            </form>
           </TabsContent>
 
           {/* Notifications Tab */}
@@ -211,15 +281,27 @@ const Settings = () => {
 
             <div className="border-t border-border pt-6">
               <h3 className="text-lg font-semibold mb-4">Wallet Connection</h3>
-              <div className="flex items-center justify-between p-4 bg-primary/10 border border-primary/20 rounded-lg">
-                <div>
-                  <p className="font-semibold">Connected Wallet</p>
-                  <p className="text-sm text-muted-foreground font-mono">
-                    0x742d...3a8f
-                  </p>
+              {address ? (
+                <div className="flex items-center justify-between p-4 bg-primary/10 border border-primary/20 rounded-lg">
+                  <div>
+                    <p className="font-semibold">Connected Wallet</p>
+                    <p className="text-sm text-muted-foreground font-mono">
+                      {formatAddress(address)}
+                    </p>
+                  </div>
+                  <Web3ConnectButton variant="outline" />
                 </div>
-                <Button variant="outline">Disconnect</Button>
-              </div>
+              ) : (
+                <div className="flex items-center justify-between p-4 bg-muted/30 border border-border rounded-lg">
+                  <div>
+                    <p className="font-semibold">No Wallet Connected</p>
+                    <p className="text-sm text-muted-foreground">
+                      Connect a wallet to access all features
+                    </p>
+                  </div>
+                  <Web3ConnectButton variant="outline" />
+                </div>
+              )}
             </div>
           </TabsContent>
 

@@ -20,6 +20,8 @@ import {
   pnlHistory,
   marketData,
 } from "@/data/mockData";
+import { useAuth } from "@/contexts/AuthProvider";
+import { useAccount } from "wagmi";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
@@ -39,6 +41,13 @@ import {
 } from "recharts";
 
 const Dashboard = () => {
+  const { profile, isAuthenticated } = useAuth();
+  const { address } = useAccount();
+
+  const formatAddress = (address: string) => {
+    return `${address.slice(0, 6)}...${address.slice(-4)}`;
+  };
+
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -78,9 +87,15 @@ const Dashboard = () => {
           <div>
             <h1 className="text-3xl font-bold mb-2">
               Welcome back,{" "}
-              <span className="gradient-text">{currentUser.username}</span>
+              <span className="gradient-text">
+                {profile?.username ||
+                  (address ? formatAddress(address) : "Trader")}
+              </span>
             </h1>
             <p className="text-muted-foreground">
+              {isAuthenticated && address && (
+                <>Connected with {formatAddress(address)} • </>
+              )}
               Real-time performance tracking • Rank #{currentUser.rank} globally
             </p>
           </div>
