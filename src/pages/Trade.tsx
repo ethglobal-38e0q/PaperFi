@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,6 +17,7 @@ import DepthChart from "@/components/DepthChart";
 import RecentTradesPanel from "@/components/RecentTradesPanel";
 import TradingViewWidget from "@/components/TradingViewWidget";
 import MarketTicker from "@/components/MarketTicker";
+import { useSidebar } from "@/contexts/SidebarProvider";
 
 const Trade = () => {
   const [selectedPair, setSelectedPair] = useState("BTCUSDT");
@@ -24,8 +25,13 @@ const Trade = () => {
   const [size, setSize] = useState("");
   const [leverage, setLeverage] = useState("10");
   const [interval, setInterval] = useState("5m");
+  const sidebar = useSidebar();
 
   const currentMarket = marketData[selectedPair as keyof typeof marketData];
+
+  useEffect(() => {
+    sidebar.close();
+  }, []);
 
   return (
     <div className="p-4 space-y-4">

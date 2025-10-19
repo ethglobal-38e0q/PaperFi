@@ -23,14 +23,20 @@ const Heatmap = () => {
   };
 
   return (
-    <div className="glass p-6 rounded-xl">
+    <div className="glass p-6 rounded-xl overflow-x-auto">
       <h3 className="text-lg font-semibold mb-4">Trading Activity</h3>
-      <div className="flex justify-around overflow-x-auto">
+      <div
+        className="flex justify-around w-[800px]"
+        onClick={e => {
+          console.log(e.target.getAttribute("data-day"));
+        }}
+      >
         {weeks.map((week, weekIndex) => (
           <div key={weekIndex} className="flex flex-col gap-1">
             {week.map((day, dayIndex) => (
               <div
                 key={`${weekIndex}-${dayIndex}`}
+                data-day={day.date}
                 className={`w-3 h-3 rounded-sm ${getIntensityColor(day.count)} transition-all hover:ring-2 hover:ring-primary/50 cursor-pointer`}
                 title={`${day.date}: ${day.count} trades, P&L: ${day.pnl > 0 ? "+" : ""}${day.pnl.toFixed(2)}`}
               />
