@@ -1,6 +1,7 @@
 # Top-level configuration
 name = "papersol"
 compatibility_date = "2025-01-01"
+main = "./src/worker/index.ts"
 
 workers_dev = false
 
@@ -14,4 +15,10 @@ head_sampling_rate = 1
 
 [assets]
 not_found_handling = "single-page-application"
-directory = "./dist/assets/"
+# directory = "./dist/assets/"
+
+[vars]
+VITE_ALCHEMY_ID="0kU__Vw0CSQAKiOX1todm"
+VITE_WALLETCONNECT_PROJECT_ID=""
+VITE_SUPABASE_URL="https://rlfcrqjynjqedtlqqknc.supabase.co"
+VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY="sb_publishable_dMmw74Vl9SopH5jVW56VrA_pclz2Csz"

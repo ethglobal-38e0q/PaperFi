@@ -28,6 +28,23 @@ export function OnboardCard() {
     if (!user.user_metadata?.username) setOpen(true);
   }, [user]);
 
+  async function uploadAvatar(file: File, userId: string) {
+    const formData = new FormData();
+    formData.append("avatar", file);
+
+    const res = await fetch("https://paper.19700102.xyz/api/avatar", {
+      method: "POST",
+      headers: {
+        "x-user-id": userId, // Worker reads this
+      },
+      body: formData,
+    });
+
+    const data = await res.json();
+    return data.url; // Public R2 URL
+  }
+
+
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -35,9 +52,11 @@ export function OnboardCard() {
       setUploading(true);
       setProgress(0);
       // todo: upload avatar to r2 here and then uncomment next 2 lines.
+      const url = await uploadAvatar(file, user.id);
+      console.log("Uploaded avatar URL:", url);
 
-      // setProgress(100)
-      // setUploading(false)
+      setProgress(100)
+      setUploading(false)
     }
   };
 
