@@ -77,12 +77,6 @@ const AssetCard = ({
 
         {/* Asset Details */}
         <div className="space-y-2">
-          <div className="flex items-center gap-2 text-sm">
-            <Clock className="w-4 h-4 text-primary" />
-            <span className="text-muted-foreground">Schedule:</span>
-            <span className="font-medium">{asset.attributes.schedule}</span>
-          </div>
-
           {asset.attributes.country && (
             <div className="flex items-center gap-2 text-sm">
               <Globe className="w-4 h-4 text-primary" />
@@ -93,9 +87,6 @@ const AssetCard = ({
 
           <div className="flex items-center justify-between text-xs text-muted-foreground">
             <span>Quote: {asset.attributes.quote_currency}</span>
-            {asset.attributes.publish_interval && (
-              <span>Interval: {asset.attributes.publish_interval}</span>
-            )}
           </div>
         </div>
 
