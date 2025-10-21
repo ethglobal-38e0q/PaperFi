@@ -51,8 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         if (error) throw error;
       })();
     }
-  }, [status, user]);
-
+  }, [status, user, address]);
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((event, session) => {
       console.log(event, session);
