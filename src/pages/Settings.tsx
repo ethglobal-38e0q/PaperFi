@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Settings as SettingsIcon,
@@ -13,26 +14,42 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthProvider";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { toast } from "sonner";
 import { Web3ConnectButton } from "@/components/Web3ConnectButton";
 import { useAccount } from "wagmi";
+import { uploadAvatar } from "@/lib/utils";
 
 const Settings = () => {
-  const { profile, updateProfile, isLoading } = useAuth();
+  const { user: profile, supabase } = useAuth();
   const { address } = useAccount();
   const [formData, setFormData] = useState({
-    username: profile?.username || "",
-    email: profile?.email || "",
+    username: profile.user_metadata?.username || "",
+    name: profile.user_metadata.display_name || "",
+    avatar: profile.user_metadata?.avatar_url || null,
   });
+  const [isUploading, setIsUploading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
-      await updateProfile(formData);
+      const { error } = await supabase.auth.updateUser({
+        data: {
+          username: formData.username,
+          display_name: formData.name,
+          avatar_url: formData.avatar,
+        },
+      });
+      if (error) throw error;
+      toast.success("Profile updated successfully!");
     } catch (error) {
+      toast.error("Failed to update profile: " + error.message);
       console.error("Failed to update profile:", error);
     }
+    setIsLoading(false);
   };
 
   const copyAddress = () => {
@@ -44,6 +61,27 @@ const Settings = () => {
 
   const formatAddress = (address: string) => {
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
+  };
+
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && profile?.id) {
+      setIsUploading(true);
+      try {
+        const avatarUrl = await uploadAvatar(file, profile.id);
+        setFormData(prev => ({ ...prev, avatar: avatarUrl }));
+        toast.success("Avatar uploaded successfully!");
+      } catch (error) {
+        console.error("Failed to upload avatar:", error);
+        toast.error("Failed to upload avatar");
+      } finally {
+        setIsUploading(false);
+      }
+    }
   };
   return (
     <div className="p-6 space-y-6">
@@ -92,19 +130,34 @@ const Settings = () => {
           {/* Profile Tab */}
           <TabsContent value="profile" className="space-y-6">
             <div className="flex items-center gap-6">
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center ring-4 ring-primary/30">
-                <span className="text-3xl font-bold text-white">
-                  {profile?.username?.charAt(0).toUpperCase() ||
-                    profile?.wallet_address?.charAt(2).toUpperCase() ||
-                    "U"}
-                </span>
+              <div className="mb-2">
+                <Avatar className="w-24 h-24">
+                  <AvatarImage src={formData.avatar} />
+                  <AvatarFallback className="text-3xl font-bold">
+                    {profile.user_metadata?.custom_claims?.address
+                      ?.substr(2, 2)
+                      .toUpperCase() || "U"}
+                  </AvatarFallback>
+                </Avatar>
               </div>
               <div>
-                <Button variant="outline" size="sm" disabled>
-                  Change Avatar
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleAvatarChange}
+                  accept="image/*"
+                  className="hidden"
+                />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleAvatarClick}
+                  disabled={isUploading}
+                >
+                  {isUploading ? "Uploading..." : "Change Avatar"}
                 </Button>
                 <p className="text-xs text-muted-foreground mt-2">
-                  Avatar customization coming soon
+                  Click to upload a new profile picture
                 </p>
               </div>
             </div>
@@ -124,16 +177,16 @@ const Settings = () => {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="name">Name</Label>
                   <Input
-                    id="email"
-                    type="email"
-                    value={formData.email}
+                    id="name"
+                    type="text"
+                    value={formData.name}
                     onChange={e =>
-                      setFormData({ ...formData, email: e.target.value })
+                      setFormData({ ...formData, name: e.target.value })
                     }
                     className="mt-2"
-                    placeholder="Enter email address"
+                    placeholder="Your name"
                   />
                 </div>
               </div>
@@ -143,7 +196,7 @@ const Settings = () => {
                 <div className="flex items-center gap-2 mt-2">
                   <Input
                     id="wallet-address"
-                    value={address || "Not connected"}
+                    value={profile.user_metadata?.custom_claims?.address}
                     className="font-mono"
                     readOnly
                   />
@@ -160,10 +213,10 @@ const Settings = () => {
               </div>
 
               <div>
-                <Label>Account Created</Label>
+                <Label>Last Updated</Label>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  {profile?.created_at
-                    ? new Date(profile.created_at).toLocaleDateString()
+                  {profile?.updated_at
+                    ? new Date(profile.updated_at).toLocaleDateString()
                     : "N/A"}
                 </p>
               </div>

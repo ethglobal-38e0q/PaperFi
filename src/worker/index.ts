@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import type { R2Bucket } from "@cloudflare/workers-types";
+import { cors } from "hono/cors";
 
 interface Env {
   R2: R2Bucket;
@@ -7,11 +8,18 @@ interface Env {
 
 const app = new Hono<{ Bindings: Env }>();
 
+app.use(
+  "/api/*",
+  cors({
+    origin: ["http://localhost:5173/", "https://paper.19700102.xyz/"],
+  })
+);
+
 // Health check
-app.get("/api/", (c) => c.json({ status: "ok" }));
+app.get("/api/", c => c.json({ status: "ok" }));
 
 // Avatar upload route
-app.post("/api/avatar", async (c) => {
+app.post("/api/avatar", async c => {
   try {
     const userId = c.req.header("x-user-id");
     if (!userId) return c.json({ error: "Missing user ID" }, 400);
