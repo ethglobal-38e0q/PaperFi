@@ -3,7 +3,7 @@
 
 import { Link } from "react-router-dom"
 import { Button } from "../components/ui/button"
-import { TrendingUp, BarChart3, Flame, Trophy, Zap, ArrowRight, CheckCircle2 } from "lucide-react"
+import { TrendingUp, BarChart3, Flame, Trophy, Zap, ArrowRight, CheckCircle2, Target, Award } from "lucide-react"
 import { motion, useScroll, useTransform } from "framer-motion"
 import { AnimatedGrid } from "../components/AnimatedGrid"
 import { FloatingParticles } from "../components/FloatingParticles"
@@ -18,6 +18,21 @@ const platformStats = {
 const Landing = () => {
   const containerRef = useRef<HTMLDivElement>(null)
   const heroRef = useRef<HTMLDivElement>(null)
+
+  const ctaRef = useRef<HTMLDivElement>(null);
+
+ 
+
+  const { scrollYProgress: ctaProgress } = useScroll({
+    target: ctaRef,
+    offset: ['start end', 'end start'],
+  });
+
+
+
+  const ctaY = useTransform(ctaProgress, [0, 1], [100, -100]);
+  const ctaScale = useTransform(ctaProgress, [0, 0.5, 1], [0.9, 1, 0.9]);
+
 
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -271,96 +286,131 @@ const Landing = () => {
           </div>
         </section>
 
-        <section className="py-32 px-6 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent" />
+        <section ref={ctaRef} className="relative py-40 px-6 overflow-hidden">
+          {/* Animated Background Elements */}
+          <motion.div 
+            style={{ y: ctaY, scale: ctaScale }}
+            className="absolute inset-0"
+          >
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-600/30 via-purple-600/10 to-transparent" />
+            <div className="absolute top-1/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
+            <div className="absolute top-2/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-violet-500/50 to-transparent" />
+            <div className="absolute top-3/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
+          </motion.div>
 
           <div className="container mx-auto relative">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              {/* Left: Bold Headline */}
-              <motion.div
-                initial={{ opacity: 0, x: -40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8 }}
-                viewport={{ once: true, margin: "-100px" }}
-              >
-                <div className="space-y-8">
-                  <div>
-                    <h2 className="text-6xl md:text-7xl font-black leading-tight text-white mb-6">
-                      Ready to{" "}
-                      <span className="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
-                        level up
-                      </span>
-                      ?
-                    </h2>
-                    <p className="text-xl text-gray-400 leading-relaxed">
-                      Join thousands of traders who've transformed their skills into real funding opportunities. Start
-                      your journey today.
-                    </p>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="text-center"
+            >
+              {/* Floating Icon Grid */}
+              <div className="relative mb-12 h-24">
+                <motion.div
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute left-1/2 top-0 -translate-x-1/2"
+                >
+                  <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-violet-600 rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(168,85,247,0.5)] rotate-12">
+                    <Zap className="w-10 h-10 text-white" />
                   </div>
+                </motion.div>
+                
+                <motion.div
+                  animate={{ y: [0, -15, 0], rotate: [0, 5, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                  className="absolute left-1/4 top-8"
+                >
+                  <Target className="w-12 h-12 text-purple-500/60" />
+                </motion.div>
+                
+                <motion.div
+                  animate={{ y: [0, -12, 0], rotate: [0, -5, 0] }}
+                  transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                  className="absolute right-1/4 top-8"
+                >
+                  <Award className="w-12 h-12 text-violet-500/60" />
+                </motion.div>
+              </div>
 
-                  {/* Benefits List */}
-                  <div className="space-y-4 pt-4">
-                    {[
-                      "Practice with real market data",
-                      "Track performance in real-time",
-                      "Get discovered by capital providers",
-                    ].map((benefit, idx) => (
-                      <motion.div
-                        key={idx}
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.6, delay: idx * 0.1 }}
-                        viewport={{ once: true }}
-                        className="flex items-center gap-3"
-                      >
-                        <CheckCircle2 className="w-6 h-6 text-purple-400 flex-shrink-0" />
-                        <span className="text-lg text-gray-300">{benefit}</span>
-                      </motion.div>
-                    ))}
-                  </div>
-
-                  <Link to="/app/dashboard">
-                    <Button
-                      size="lg"
-                      className="gap-3 text-lg px-10 py-7 mt-10 group bg-purple-600 hover:bg-purple-700 text-white shadow-lg shadow-purple-500/40 hover:shadow-purple-500/60 w-full md:w-auto"
-                    >
-                      <span>Start Trading Free</span>
-                      <Zap className="w-6 h-6 group-hover:rotate-12 transition-transform" />
-                    </Button>
-                  </Link>
-                </div>
-              </motion.div>
-
-              {/* Right: Visual Element */}
-              <motion.div
-                initial={{ opacity: 0, x: 40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                viewport={{ once: true, margin: "-100px" }}
-                className="relative h-96 md:h-full min-h-96"
+              <motion.h2 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                viewport={{ once: true }}
+                className="text-6xl md:text-7xl font-black mb-6 text-foreground"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-purple-800/20 rounded-3xl blur-2xl" />
-                <div className="relative backdrop-blur-xl bg-gray-900/50 border border-purple-500/30 rounded-3xl p-12 h-full flex flex-col justify-center">
+                Ready to{' '}
+                <span className="relative inline-block">
+                  <span className="bg-gradient-to-r from-purple-400 via-violet-400 to-purple-400 bg-clip-text text-transparent">
+                    Start Trading
+                  </span>
                   <motion.div
-                    animate={{ y: [0, -20, 0] }}
-                    transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY }}
-                    className="space-y-8"
+                    className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 via-violet-500 to-purple-500 rounded-full"
+                    initial={{ scaleX: 0 }}
+                    whileInView={{ scaleX: 1 }}
+                    transition={{ duration: 0.8, delay: 0.5 }}
+                    viewport={{ once: true }}
+                  />
+                </span>
+                ?
+              </motion.h2>
+
+              <motion.p 
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                viewport={{ once: true }}
+                className="text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed"
+              >
+                Join <span className="text-purple-400 font-bold">{platformStats.activeTraders.toLocaleString()}+</span> traders improving their skills every day.
+                Start your journey from practice to funded trader.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                viewport={{ once: true }}
+                className="flex gap-6 justify-center flex-wrap"
+              >
+                <Link to="/login">
+                  <Button
+                    size="lg"
+                    className="gap-3 text-xl px-12 py-7 group bg-purple-600 hover:bg-purple-700 text-white shadow-[0_0_30px_rgba(168,85,247,0.4)] hover:shadow-[0_0_50px_rgba(168,85,247,0.6)] hover:scale-105 transition-all"
                   >
-                    <div className="space-y-2">
-                      <div className="text-sm text-purple-400 font-semibold">Your Trading Stats</div>
-                      <div className="text-5xl font-black text-white">+2,847%</div>
-                      <div className="text-gray-400">Average return potential</div>
-                    </div>
-                    <div className="h-px bg-gradient-to-r from-purple-600/50 to-transparent" />
-                    <div className="space-y-2">
-                      <div className="text-sm text-purple-400 font-semibold">Funded Traders</div>
-                      <div className="text-4xl font-black text-white">12,847+</div>
-                      <div className="text-gray-400">Already earning real capital</div>
-                    </div>
-                  </motion.div>
+                    <span>Get Started Free</span>
+                    <Zap className="w-6 h-6 group-hover:rotate-12 transition-transform" />
+                  </Button>
+                </Link>
+              </motion.div>
+
+              {/* Stats Bar */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+                viewport={{ once: true }}
+                className="mt-16 flex gap-12 justify-center flex-wrap text-center"
+              >
+                <div>
+                  <div className="text-3xl font-black text-violet-400 mb-1">${platformStats.totalVolume}</div>
+                  <div className="text-sm text-muted-foreground">Total Volume</div>
+                </div>
+                <div className="w-px bg-border" />
+                <div>
+                  <div className="text-3xl font-black text-purple-400 mb-1">${platformStats.fundsAllocated}</div>
+                  <div className="text-sm text-muted-foreground">Funds Allocated</div>
+                </div>
+                <div className="w-px bg-border" />
+                <div>
+                  <div className="text-3xl font-black text-violet-400 mb-1">24/7</div>
+                  <div className="text-sm text-muted-foreground">Market Access</div>
                 </div>
               </motion.div>
-            </div>
+            </motion.div>
           </div>
         </section>
 
