@@ -11,7 +11,7 @@ const app = new Hono<{ Bindings: Env }>();
 app.use(
   "/api/*",
   cors({
-    origin: ["http://localhost:5173/", "https://paper.19700102.xyz/"],
+    origin: ["http://localhost:5173/", "https://paperfi.trade/"],
   })
 );
 

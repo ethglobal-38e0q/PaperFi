@@ -9,7 +9,7 @@ export async function uploadAvatar(file: File, userId: string) {
   const formData = new FormData();
   formData.append("avatar", file);
 
-  const res = await fetch("https://paper.19700102.xyz/api/avatar", {
+  const res = await fetch("/api/avatar", {
     method: "POST",
     headers: {
       "x-user-id": userId, // Worker reads this
