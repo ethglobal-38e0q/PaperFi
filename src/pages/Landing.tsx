@@ -55,8 +55,9 @@ const Landing = () => {
         <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-black/70 border-b border-white/10">
           <div className="container mx-auto px-6 h-20 flex items-center justify-between">
             <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-11 h-11 bg-gradient-to-br from-purple-600 via-purple-500 to-purple-700 rounded-full flex items-center justify-center shadow-lg shadow-purple-500/50 group-hover:shadow-purple-500/70 transition-all duration-300 group-hover:scale-105">
-                <TrendingUp className="w-6 h-6 text-white" />
+              <div className="w-11 h-11 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 group-hover:scale-105">
+                <img src="neon-icon.jpg" alt="" />
+                {/* <img src="icon.png" alt="" /> */}
               </div>
               <span className="text-2xl font-bold text-white">PerpPractice</span>
             </Link>
@@ -237,18 +238,28 @@ const Landing = () => {
                         <div className="absolute inset-0 backdrop-blur-xl bg-gray-900/40 border border-purple-500/30" />
 
                         {/* Animated content inside visual block */}
-                        <div className="relative w-full h-full flex items-center justify-center p-8">
+                        <div className="relative w-full h-full flex items-center justify-center ">
                           <motion.div
                             animate={{ y: [0, -10, 0] }}
                             transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
                             className="text-center"
                           >
-                            <Icon className="w-24 h-24 text-purple-400/60 mx-auto mb-6" />
+                            {/* <Icon className="w-24 h-24 text-purple-400/60 mx-auto mb-6" />
                             <p className="text-gray-300 text-sm font-medium">
                               {index === 0 && "Live market data • Zero risk"}
                               {index === 1 && "Real-time analytics • Advanced metrics"}
                               {index === 2 && "Top performers • Capital ready"}
-                            </p>
+                            </p> */}
+                            {
+                              index === 0 && <img src="pic1.png" alt="" className=" w-full" />
+                            }
+                            {
+                              index === 1 && <img src="pic3.png" alt="" className=" w-full " />
+                            }
+                            {
+                              index === 2 && <img src="pic2.png" alt="" className=" w-full" />
+                            }
+                            
                           </motion.div>
                         </div>
                       </motion.div>
