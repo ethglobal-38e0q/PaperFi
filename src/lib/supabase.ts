@@ -13,7 +13,7 @@ export const supabase = createClient(supabaseUrl, supabaseKey);
 export const generateSignInMessage = (address: string, nonce?: string) => {
   const domain = window.location.host;
   const uri = window.location.origin;
-  const statement = "Sign in to PerpPractice with your Ethereum account.";
+  const statement = "Sign in to PaperFi with your Ethereum account.";
   const version = "1";
   const chainId = 1; // Ethereum mainnet
   const nonceValue = nonce || Math.random().toString(36).substring(7);

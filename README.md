@@ -1,4 +1,4 @@
-# PerpPractice - Crypto Trading Practice Platform
+# PaperFi - Crypto Trading Practice Platform
 
 A fully responsive, production-ready frontend for a simulated perpetuals trading platform. Built with React, TypeScript, TailwindCSS, and Framer Motion.
 

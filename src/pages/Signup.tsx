@@ -58,7 +58,7 @@ const Signup = () => {
           <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center glow-primary">
             <TrendingUp className="w-6 h-6 text-white" />
           </div>
-          <span className="text-2xl font-bold gradient-text">PerpPractice</span>
+          <span className="text-2xl font-bold gradient-text">PaperFi</span>
         </Link>
 
         <h1 className="text-3xl font-bold mb-2 text-center">Create Account</h1>

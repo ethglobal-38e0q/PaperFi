@@ -2,7 +2,7 @@
 
 export const currentUser = {
   username: "Varun",
-  email: "varun@perppractice.com",
+  email: "admin@PaperFi.trade",
   avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Varun",
   dailyPnL: 245.5,
   totalPnL: 1550.25,
