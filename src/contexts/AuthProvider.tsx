@@ -24,7 +24,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [user, setUser] = React.useState<User | null>(
-    session.data.session?.user
+    session?.data?.session?.user
   );
   const { address, status } = useAccount();
   const { signMessageAsync } = useSignMessage();
