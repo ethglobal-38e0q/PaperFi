@@ -41,7 +41,7 @@ import {
 } from "recharts";
 
 const Dashboard = () => {
-  const { profile, isAuthenticated } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const { address } = useAccount();
 
   const formatAddress = (address: string) => {
@@ -88,7 +88,7 @@ const Dashboard = () => {
             <h1 className="text-3xl font-bold mb-2">
               Welcome back,{" "}
               <span className="gradient-text">
-                {profile?.username ||
+                {user.user_metadata?.username ||
                   (address ? formatAddress(address) : "Trader")}
               </span>
             </h1>

@@ -9,7 +9,7 @@ export type AuthContextType = {
   supabase: SupabaseClient;
   walletAddress: Hex;
 };
-
+const session = await supabase.auth.getSession();
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const useAuth = (): AuthContextType => {
@@ -23,7 +23,9 @@ export const useAuth = (): AuthContextType => {
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [user, setUser] = React.useState<User | null>(null);
+  const [user, setUser] = React.useState<User | null>(
+    session.data.session.user
+  );
   const { address, status } = useAccount();
   const { signMessageAsync } = useSignMessage();
 
