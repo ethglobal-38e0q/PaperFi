@@ -255,7 +255,7 @@ const Landing = () => {
                         {/* Animated content inside visual block */}
                         <div className="relative w-full h-full flex items-center justify-center ">
                           <motion.div
-                            animate={{ y: [0, -10, 0] }}
+                          
                             transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
                             className="text-center"
                           >
@@ -266,13 +266,13 @@ const Landing = () => {
                               {index === 2 && "Top performers • Capital ready"}
                             </p> */}
                             {
-                              index === 0 && <img src="pic1.png" alt="" className=" w-full" />
+                              index === 0 && <img src="pic1.jpg" alt="" className=" w-full" />
                             }
                             {
-                              index === 1 && <img src="pic3.png" alt="" className=" w-full " />
+                              index === 1 && <img src="pic2.jpg" alt="" className=" w-full " />
                             }
                             {
-                              index === 2 && <img src="pic2.png" alt="" className=" w-full" />
+                              index === 2 && <img src="pic3.jpg" alt="" className=" w-full" />
                             }
                             
                           </motion.div>
