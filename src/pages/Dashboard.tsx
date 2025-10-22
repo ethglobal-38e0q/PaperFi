@@ -62,17 +62,17 @@ const Dashboard = () => {
   };
 
   const hourlyPnL = [
-    { hour: "00:00", pnl: 120 },
-    { hour: "04:00", pnl: -50 },
-    { hour: "08:00", pnl: 240 },
-    { hour: "12:00", pnl: 310 },
-    { hour: "16:00", pnl: -100 },
-    { hour: "20:00", pnl: 450 },
+    { hour: "00:00", pnl: 0 },
+    { hour: "04:00", pnl: 0 },
+    { hour: "08:00", pnl: 0 },
+    { hour: "12:00", pnl: 0 },
+    { hour: "16:00", pnl: 0 },
+    { hour: "20:00", pnl: 0 },
   ];
 
   const tradeDistribution = [
-    { name: "Wins", value: 68, fill: "hsl(var(--success))" },
-    { name: "Losses", value: 32, fill: "hsl(var(--loss))" },
+    { name: "Wins", value: 50, fill: "hsl(var(--success))" },
+    { name: "Losses", value: 50, fill: "hsl(var(--loss))" },
   ];
 
   return (
@@ -88,7 +88,8 @@ const Dashboard = () => {
             <h1 className="text-3xl font-bold mb-2">
               Welcome back,{" "}
               <span className="gradient-text">
-                {user.user_metadata?.username ||
+                {user.user_metadata?.display_name ||
+                  user.user_metadata?.username ||
                   (address ? formatAddress(address) : "Trader")}
               </span>
             </h1>
@@ -102,11 +103,11 @@ const Dashboard = () => {
           <div className="flex gap-4">
             <div className="text-right">
               <p className="text-sm text-muted-foreground">Session P&L</p>
-              <p className="text-2xl font-bold text-success">+$245.50</p>
+              <p className="text-2xl font-bold text-success">+$0</p>
             </div>
             <div className="text-right">
               <p className="text-sm text-muted-foreground">Active Time</p>
-              <p className="text-2xl font-bold">2h 34m</p>
+              <p className="text-2xl font-bold">0h 00m</p>
             </div>
           </div>
         </div>
@@ -123,7 +124,7 @@ const Dashboard = () => {
           <StatsCard
             title="Daily P&L"
             value={`$${currentUser.dailyPnL.toFixed(2)}`}
-            change={8.2}
+            change={0}
             icon={currentUser.dailyPnL > 0 ? TrendingUp : TrendingDown}
             trend={currentUser.dailyPnL > 0 ? "up" : "down"}
           />
@@ -134,7 +135,7 @@ const Dashboard = () => {
             value={`${currentUser.winRate}%`}
             icon={Target}
             trend="up"
-            subtitle="147 trades"
+            subtitle="0 trades"
           />
         </motion.div>
         <motion.div variants={item}>
@@ -152,13 +153,13 @@ const Dashboard = () => {
             value={`#${currentUser.rank}`}
             icon={Award}
             trend="up"
-            subtitle="of 1,247"
+            subtitle="of 0"
           />
         </motion.div>
         <motion.div variants={item}>
           <StatsCard
             title="Avg Hold"
-            value="2.4h"
+            value="0h"
             icon={Clock}
             trend="neutral"
             subtitle="per trade"
@@ -167,7 +168,7 @@ const Dashboard = () => {
         <motion.div variants={item}>
           <StatsCard
             title="Vol Today"
-            value="$42.5K"
+            value="$0"
             icon={Activity}
             trend="up"
             subtitle="traded"
@@ -291,15 +292,15 @@ const Dashboard = () => {
               <div className="mt-4 grid grid-cols-3 gap-3 text-center">
                 <div>
                   <p className="text-xs text-muted-foreground">Trades</p>
-                  <p className="text-xl font-bold">12</p>
+                  <p className="text-xl font-bold">0</p>
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground">Wins</p>
-                  <p className="text-xl font-bold text-success">9</p>
+                  <p className="text-xl font-bold text-success">0</p>
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground">Losses</p>
-                  <p className="text-xl font-bold text-loss">3</p>
+                  <p className="text-xl font-bold text-loss">0</p>
                 </div>
               </div>
             </motion.div>
@@ -463,14 +464,14 @@ const Dashboard = () => {
                   <div className="w-3 h-3 rounded-full bg-success" />
                   <span className="text-sm text-muted-foreground">Wins</span>
                 </div>
-                <p className="text-2xl font-bold text-success mt-1">68%</p>
+                <p className="text-2xl font-bold text-success mt-1">50%</p>
               </div>
               <div className="text-center">
                 <div className="flex items-center gap-2 justify-center">
                   <div className="w-3 h-3 rounded-full bg-loss" />
                   <span className="text-sm text-muted-foreground">Losses</span>
                 </div>
-                <p className="text-2xl font-bold text-loss mt-1">32%</p>
+                <p className="text-2xl font-bold text-loss mt-1">50%</p>
               </div>
             </div>
           </motion.div>

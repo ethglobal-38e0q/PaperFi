@@ -73,6 +73,7 @@ const Settings = () => {
       setIsUploading(true);
       try {
         const avatarUrl = await uploadAvatar(file, profile.id);
+        console.log(avatarUrl);
         setFormData(prev => ({ ...prev, avatar: avatarUrl }));
         toast.success("Avatar uploaded successfully!");
       } catch (error) {
