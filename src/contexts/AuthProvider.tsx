@@ -1,6 +1,7 @@
 import { generateSignInMessage, supabase } from "@/lib/supabase";
 import { SupabaseClient, User } from "@supabase/supabase-js";
 import React, { createContext, useContext, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Hex } from "viem";
 import { useAccount, useSignMessage } from "wagmi";
 
@@ -28,12 +29,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   );
   const { address, status } = useAccount();
   const { signMessageAsync } = useSignMessage();
+  const location = useLocation();
 
   useEffect(() => {
     if (user && status === "disconnected") {
       supabase.auth.signOut();
     } else if (!user && status === "connected") {
       (async () => {
+        if (location.pathname === "/") return;
+
         const message = generateSignInMessage(address);
 
         // Request signature from wallet
