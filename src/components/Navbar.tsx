@@ -47,29 +47,32 @@ const Navbar = () => {
 
           <ConnectKitButton />
 
-          <Link to="/app/settings">
-            <Button variant="ghost" size="icon">
-              <Settings className="w-5 h-5" />
-            </Button>
-          </Link>
-
           {/* User Avatar */}
-          <Link
-            to="/app/profile"
-            className="flex items-center gap-2 p-1 rounded-lg hover:bg-muted/50 transition-colors"
-          >
-            <Avatar className="w-8 h-8">
-              <AvatarImage src={user.user_metadata?.avatar_url} />
-              <AvatarFallback className="text-md font-bold">
-                {user.user_metadata?.custom_claims?.address
-                  ?.substr(2, 2)
-                  .toUpperCase() || "U"}
-              </AvatarFallback>
-            </Avatar>
-            <span className="hidden lg:inline font-medium">
-              {user.user_metadata?.username}
-            </span>
-          </Link>
+          {user && (
+            <>
+              <Link to="/app/settings">
+                <Button variant="ghost" size="icon">
+                  <Settings className="w-5 h-5" />
+                </Button>
+              </Link>
+              <Link
+                to="/app/profile"
+                className="flex items-center gap-2 p-1 rounded-lg hover:bg-muted/50 transition-colors"
+              >
+                <Avatar className="w-8 h-8">
+                  <AvatarImage src={user.user_metadata?.avatar_url} />
+                  <AvatarFallback className="text-md font-bold">
+                    {user.user_metadata?.custom_claims?.address
+                      ?.substr(2, 2)
+                      .toUpperCase() || "U"}
+                  </AvatarFallback>
+                </Avatar>
+                <span className="hidden lg:inline font-medium">
+                  {user.user_metadata?.username}
+                </span>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </nav>
