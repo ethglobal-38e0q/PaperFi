@@ -95,7 +95,6 @@ const AssetCard = ({
           className="w-full bg-gradient-primary hover:opacity-90 transition-opacity"
           size="sm"
         >
-          <Rocket className="w-4 h-4 mr-2" />
           Trade {asset.attributes.base}
         </Button>
       </CardContent>
@@ -196,13 +195,11 @@ const Launchpad = () => {
       {/* Header */}
       <div className="space-y-4">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-gradient-primary rounded-xl flex items-center justify-center glow-primary">
+          <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center">
             <Rocket className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold gradient-text">
-              Asset Launchpad
-            </h1>
+            <h1 className="text-3xl font-bold text-primary">Asset Launchpad</h1>
             <p className="text-muted-foreground">
               Discover and trade digital assets across multiple markets
             </p>

@@ -18,7 +18,7 @@ const Navbar = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3 group">
           <div className="w-11 h-11 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 group-hover:scale-105">
-            <img src="neon-icon.jpg" alt="" />
+            <img src="neon-icon.png" alt="" />
             {/* <img src="icon.png" alt="" /> */}
           </div>
           <span className="text-2xl font-bold text-white">PaperFi</span>

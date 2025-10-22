@@ -136,21 +136,21 @@ const Sidebar = () => {
             <Tooltip>
               <TooltipTrigger asChild>
                 <div className="text-center cursor-default">
-                  <p className="text-sm font-bold text-success">+$245</p>
+                  <p className="text-sm font-bold text-success">+$0</p>
                 </div>
               </TooltipTrigger>
               <TooltipContent side="right">
                 <div className="text-center">
                   <p className="font-medium">Daily P&L</p>
-                  <p className="text-success">+$245.50 (+8.2%)</p>
+                  <p className="text-success">+$0 (+0%)</p>
                 </div>
               </TooltipContent>
             </Tooltip>
           ) : (
             <div className="opacity-100 transition-opacity duration-300">
               <p className="text-xs text-muted-foreground mb-2">Daily P&L</p>
-              <p className="text-2xl font-bold text-success">+$245.50</p>
-              <p className="text-xs text-success mt-1">+8.2% today</p>
+              <p className="text-2xl font-bold text-success">+$0</p>
+              <p className="text-xs text-success mt-1">+0% today</p>
             </div>
           )}
         </div>

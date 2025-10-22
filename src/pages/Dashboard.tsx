@@ -87,7 +87,7 @@ const Dashboard = () => {
           <div>
             <h1 className="text-3xl font-bold mb-2">
               Welcome back,{" "}
-              <span className="gradient-text">
+              <span className="text-primary">
                 {user.user_metadata?.display_name ||
                   user.user_metadata?.username ||
                   (address ? formatAddress(address) : "Trader")}
