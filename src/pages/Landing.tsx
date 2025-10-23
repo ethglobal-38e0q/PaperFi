@@ -16,7 +16,7 @@ import {
 import { motion, useScroll, useTransform } from "framer-motion";
 import { AnimatedGrid } from "../components/AnimatedGrid";
 import { FloatingParticles } from "../components/FloatingParticles";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 const platformStats = {
   totalVolume: "2.8B",
@@ -25,13 +25,18 @@ const platformStats = {
 };
 
 const Landing = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const heroRef = useRef<HTMLDivElement>(null);
-
-  const ctaRef = useRef<HTMLDivElement>(null);
+  const [currentSection, setCurrentSection] = useState(0);
+  const isScrolling = useRef(false);
+  const firstRef = useRef<HTMLDivElement>(null);
+  const secondRef = useRef<HTMLDivElement>(null);
+  const thirdRef = useRef<HTMLDivElement>(null);
+  const fourthRef = useRef<HTMLDivElement>(null);
+  const fifthRef = useRef<HTMLDivElement>(null);
+  const sixthRef = useRef<HTMLDivElement>(null);
+  const sectionsRef = [firstRef, secondRef, thirdRef, fourthRef, fifthRef];
 
   const { scrollYProgress: ctaProgress } = useScroll({
-    target: ctaRef,
+    target: fifthRef,
     offset: ["start end", "end start"],
   });
 
@@ -39,7 +44,7 @@ const Landing = () => {
   const ctaScale = useTransform(ctaProgress, [0, 0.5, 1], [0.9, 1, 0.9]);
 
   const { scrollYProgress } = useScroll({
-    target: heroRef,
+    target: thirdRef,
     offset: ["start start", "end start"],
   });
 
@@ -47,46 +52,57 @@ const Landing = () => {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.5, 0]);
   const heroScale = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
 
-  const features = [
-    {
-      icon: BarChart3,
-      title: "Real Market Feeds, No Risk",
-      description:
-        "Practice with live market data without risking real capital. Get instant feedback on every trade.",
-    },
-    {
-      icon: Flame,
-      title: "Track Performance",
-      description:
-        "Monitor your streaks, P&L, and win rates in real-time with advanced heatmaps and analytics.",
-    },
-    {
-      icon: Trophy,
-      title: "Get Funded by Real Clients",
-      description:
-        "Top performers get funding opportunities from capital providers. Turn practice into profit.",
-    },
-  ];
+  const scrollToSection = index => {
+    if (!sectionsRef[index] || isScrolling.current) return;
+
+    isScrolling.current = true;
+
+    // sectionsRef[index].current.scrollIntoView({
+    //   behavior: "smooth",
+    //   block: "start",
+    // });
+
+    // Prevent new scrolls for 1 second (smooth scroll duration)
+    setTimeout(() => {
+      isScrolling.current = false;
+      setCurrentSection(index);
+    }, 2000);
+  };
+
+  const handleWheel = e => {
+    // e.preventDefault();
+
+    if (isScrolling.current) return;
+
+    if (e.deltaY > 0) {
+      // Scroll down
+      const nextSection = Math.min(currentSection + 1, sectionsRef.length - 1);
+      if (nextSection !== currentSection) {
+        // scrollToSection(nextSection);
+      }
+    } else {
+      // Scroll up
+      const prevSection = Math.max(currentSection - 1, 0);
+      if (prevSection !== currentSection) {
+        // scrollToSection(prevSection);
+      }
+    }
+  };
 
   return (
-    <div
-      ref={containerRef}
-      className="min-h-screen bg-black text-white overflow-hidden"
-    >
+    <div className="min-h-screen bg-black text-white overflow-hidden">
       <AnimatedGrid />
       <FloatingParticles />
 
-      <div className="relative z-10">
+      <div className="relative z-10" onWheel={handleWheel}>
         <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-black/70 border-b border-white/10">
           <div className="container mx-auto px-6 h-20 flex items-center justify-between">
             <Link to="/" className="flex items-center gap-3 group">
               <div className="w-11 h-11 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 group-hover:scale-105">
-                <img src="neon-icon.jpg" alt="" />
+                <img src="neon-icon.png" alt="" />
                 {/* <img src="icon.png" alt="" /> */}
               </div>
-              <span className="text-2xl font-bold text-white">
-                PerpPractice
-              </span>
+              <span className="text-2xl font-bold text-white">PaperFi</span>
             </Link>
 
             <div className="flex items-center gap-4">
@@ -105,7 +121,7 @@ const Landing = () => {
         </nav>
 
         <motion.section
-          ref={heroRef}
+          ref={firstRef}
           style={{ y: heroY, opacity: heroOpacity, scale: heroScale }}
           className="pt-40 pb-32 px-6 relative"
         >
@@ -206,7 +222,7 @@ const Landing = () => {
           </div>
         </motion.section>
 
-        <section className="py-32 px-6 relative">
+        <section ref={secondRef} className="py-32 px-6 relative">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-950/10 to-transparent" />
 
           <div className="container mx-auto relative">
@@ -220,7 +236,7 @@ const Landing = () => {
               <h2 className="text-5xl md:text-6xl font-black mb-6 text-white">
                 Why{" "}
                 <span className="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
-                  PerpPractice
+                  PaperFi
                 </span>
                 ?
               </h2>
@@ -231,94 +247,224 @@ const Landing = () => {
             </motion.div>
 
             <div className="space-y-24">
-              {features.map((feature, index) => {
-                const Icon = feature.icon;
-                const isEven = index % 2 === 0;
-
-                return (
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                className={`grid grid-cols-1 md:grid-cols-2 gap-12 items-center`}
+              >
+                {/* Content Block */}
+                <div className={"md:order-1"}>
                   <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 40 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: index * 0.1 }}
-                    viewport={{ once: true, margin: "-50px" }}
-                    className={`grid grid-cols-1 md:grid-cols-2 gap-12 items-center ${isEven ? "" : "md:grid-cols-2"}`}
+                    initial={{ opacity: 0, x: -30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.8, delay: 0.2 }}
+                    viewport={{ once: true }}
                   >
-                    {/* Content Block */}
-                    <div className={isEven ? "md:order-1" : "md:order-2"}>
-                      <motion.div
-                        initial={{ opacity: 0, x: isEven ? -30 : 30 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.8, delay: index * 0.1 + 0.2 }}
-                        viewport={{ once: true }}
-                      >
-                        <div className="flex items-center gap-4 mb-6">
-                          <div className="w-16 h-16 bg-gradient-to-br from-purple-600/30 to-purple-800/30 rounded-2xl flex items-center justify-center border border-purple-500/50">
-                            <Icon className="w-8 h-8 text-purple-400" />
-                          </div>
-                          <div className="h-1 w-12 bg-gradient-to-r from-purple-600 to-purple-400" />
-                        </div>
-                        <h3 className="text-4xl md:text-5xl font-black mb-6 text-white leading-tight">
-                          {feature.title}
-                        </h3>
-                        <p className="text-lg text-gray-400 leading-relaxed mb-8">
-                          {feature.description}
-                        </p>
-                        <div className="flex items-center gap-3 text-purple-400 font-semibold group cursor-pointer">
-                          <span>Learn more</span>
-                          <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
-                        </div>
-                      </motion.div>
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="w-16 h-16 bg-gradient-to-br from-purple-600/30 to-purple-800/30 rounded-2xl flex items-center justify-center border border-purple-500/50">
+                        <BarChart3 className="w-8 h-8 text-purple-400" />
+                      </div>
+                      <div className="h-1 w-12 bg-gradient-to-r from-purple-600 to-purple-400" />
                     </div>
+                    <h3 className="text-4xl md:text-5xl font-black mb-6 text-white leading-tight">
+                      Real Market Feeds, No Risk
+                    </h3>
+                    <p className="text-lg text-gray-400 leading-relaxed mb-8">
+                      Practice with live market data without risking real
+                      capital. Get instant feedback on every trade.
+                    </p>
+                    <div
+                      ref={thirdRef}
+                      className="flex items-center gap-3 text-purple-400 font-semibold group cursor-pointer"
+                    >
+                      <span>Learn more</span>
+                      <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+                    </div>
+                  </motion.div>
+                </div>
 
-                    {/* Visual Block */}
-                    <div className={isEven ? "md:order-2" : "md:order-1"}>
+                {/* Visual Block */}
+                <div className={"md:order-2"}>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.8, delay: 0.3 }}
+                    viewport={{ once: true }}
+                    className="relative h-80 md:h-96 rounded-3xl overflow-hidden group"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-purple-500/10 to-purple-800/20" />
+                    <div className="absolute inset-0 backdrop-blur-xl bg-gray-900/40 border border-purple-500/30" />
+
+                    {/* Animated content inside visual block */}
+                    <div className="relative w-full h-full flex items-center justify-center ">
                       <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.8, delay: index * 0.1 + 0.3 }}
-                        viewport={{ once: true }}
-                        className="relative h-80 md:h-96 rounded-3xl overflow-hidden group"
+                        transition={{
+                          duration: 4,
+                          repeat: Number.POSITIVE_INFINITY,
+                        }}
+                        className="text-center"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-purple-500/10 to-purple-800/20" />
-                        <div className="absolute inset-0 backdrop-blur-xl bg-gray-900/40 border border-purple-500/30" />
+                        {/* <Icon className="w-24 h-24 text-purple-400/60 mx-auto mb-6" />
+                        <p className="text-gray-300 text-sm font-medium">
+                          {index === 0 && "Live market data • Zero risk"}
+                          {index === 1 && "Real-time analytics • Advanced metrics"}
+                          {index === 2 && "Top performers • Capital ready"}
+                        </p> */}
 
-                        {/* Animated content inside visual block */}
-                        <div className="relative w-full h-full flex items-center justify-center ">
-                          <motion.div
-                            transition={{
-                              duration: 4,
-                              repeat: Number.POSITIVE_INFINITY,
-                            }}
-                            className="text-center"
-                          >
-                            {/* <Icon className="w-24 h-24 text-purple-400/60 mx-auto mb-6" />
-                            <p className="text-gray-300 text-sm font-medium">
-                              {index === 0 && "Live market data • Zero risk"}
-                              {index === 1 && "Real-time analytics • Advanced metrics"}
-                              {index === 2 && "Top performers • Capital ready"}
-                            </p> */}
-                            {index === 0 && (
-                              <img src="pic1.jpg" alt="" className=" w-full" />
-                            )}
-                            {index === 1 && (
-                              <img src="pic2.jpg" alt="" className=" w-full " />
-                            )}
-                            {index === 2 && (
-                              <img src="pic3.jpg" alt="" className=" w-full" />
-                            )}
-                          </motion.div>
-                        </div>
+                        <img src="pic1.jpg" alt="" className=" w-full" />
                       </motion.div>
                     </div>
                   </motion.div>
-                );
-              })}
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.1 }}
+                viewport={{ once: true, margin: "-50px" }}
+                className={`grid grid-cols-1 md:grid-cols-2 gap-12 items-center md:grid-cols-2`}
+              >
+                {/* Content Block */}
+                <div className={"md:order-2"}>
+                  <motion.div
+                    initial={{ opacity: 0, x: 30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.8, delay: 0.1 + 0.2 }}
+                    viewport={{ once: true }}
+                  >
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="w-16 h-16 bg-gradient-to-br from-purple-600/30 to-purple-800/30 rounded-2xl flex items-center justify-center border border-purple-500/50">
+                        <Flame className="w-8 h-8 text-purple-400" />
+                      </div>
+                      <div className="h-1 w-12 bg-gradient-to-r from-purple-600 to-purple-400" />
+                    </div>
+                    <h3 className="text-4xl md:text-5xl font-black mb-6 text-white leading-tight">
+                      Track Performance
+                    </h3>
+                    <p className="text-lg text-gray-400 leading-relaxed mb-8">
+                      Monitor your streaks, P&amp;L, and win rates in real-time
+                      with advanced heatmaps and analytics.
+                    </p>
+                    <div
+                      ref={fourthRef}
+                      className="flex items-center gap-3 text-purple-400 font-semibold group cursor-pointer"
+                    >
+                      <span>Learn more</span>
+                      <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+                    </div>
+                  </motion.div>
+                </div>
+
+                {/* Visual Block */}
+                <div className={"md:order-1"}>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.8, delay: 0.1 + 0.3 }}
+                    viewport={{ once: true }}
+                    className="relative h-80 md:h-96 rounded-3xl overflow-hidden group"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-purple-500/10 to-purple-800/20" />
+                    <div className="absolute inset-0 backdrop-blur-xl bg-gray-900/40 border border-purple-500/30" />
+
+                    {/* Animated content inside visual block */}
+                    <div className="relative w-full h-full flex items-center justify-center ">
+                      <motion.div
+                        transition={{
+                          duration: 4,
+                          repeat: Number.POSITIVE_INFINITY,
+                        }}
+                        className="text-center"
+                      >
+                        {/* <Icon className="w-24 h-24 text-purple-400/60 mx-auto mb-6" />
+                        <p className="text-gray-300 text-sm font-medium">
+                          {index === 0 && "Live market data • Zero risk"}
+                          {index === 1 && "Real-time analytics • Advanced metrics"}
+                          {index === 2 && "Top performers • Capital ready"}
+                        </p> */}
+                        <img src="pic2.jpg" alt="" className=" w-full " />
+                      </motion.div>
+                    </div>
+                  </motion.div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 2 * 0.1 }}
+                viewport={{ once: true, margin: "-50px" }}
+                className={`grid grid-cols-1 md:grid-cols-2 gap-12 items-center`}
+              >
+                {/* Content Block */}
+                <div className={"md:order-1"}>
+                  <motion.div
+                    initial={{ opacity: 0, x: -30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.8, delay: 2 * 0.1 + 0.2 }}
+                    viewport={{ once: true }}
+                  >
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="w-16 h-16 bg-gradient-to-br from-purple-600/30 to-purple-800/30 rounded-2xl flex items-center justify-center border border-purple-500/50">
+                        <Trophy className="w-8 h-8 text-purple-400" />
+                      </div>
+                      <div className="h-1 w-12 bg-gradient-to-r from-purple-600 to-purple-400" />
+                    </div>
+                    <h3 className="text-4xl md:text-5xl font-black mb-6 text-white leading-tight">
+                      Get Funded by Real Clients
+                    </h3>
+                    <p className="text-lg text-gray-400 leading-relaxed mb-8">
+                      Top performers get funding opportunities from capital
+                      providers. Turn practice into profit.
+                    </p>
+                    <div className="flex items-center gap-3 text-purple-400 font-semibold group cursor-pointer">
+                      <span>Learn more</span>
+                      <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+                    </div>
+                  </motion.div>
+                </div>
+
+                {/* Visual Block */}
+                <div ref={fifthRef} className={"md:order-2"}>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.8, delay: 2 * 0.1 + 0.3 }}
+                    viewport={{ once: true }}
+                    className="relative h-80 md:h-96 rounded-3xl overflow-hidden group"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-purple-500/10 to-purple-800/20" />
+                    <div className="absolute inset-0 backdrop-blur-xl bg-gray-900/40 border border-purple-500/30" />
+
+                    {/* Animated content inside visual block */}
+                    <div className="relative w-full h-full flex items-center justify-center ">
+                      <motion.div
+                        transition={{
+                          duration: 4,
+                          repeat: Number.POSITIVE_INFINITY,
+                        }}
+                        className="text-center"
+                      >
+                        {/* <Icon className="w-24 h-24 text-purple-400/60 mx-auto mb-6" />
+                        <p className="text-gray-300 text-sm font-medium">
+                          {index === 0 && "Live market data • Zero risk"}
+                          {index === 1 && "Real-time analytics • Advanced metrics"}
+                          {index === 2 && "Top performers • Capital ready"}
+                        </p> */}
+                        <img src="pic3.jpg" alt="" className=" w-full" />
+                      </motion.div>
+                    </div>
+                  </motion.div>
+                </div>
+              </motion.div>
             </div>
           </div>
         </section>
 
-        <section ref={ctaRef} className="relative py-40 px-6 overflow-hidden">
+        <section ref={fifthRef} className="relative py-40 px-6 overflow-hidden">
           {/* Animated Background Elements */}
           <motion.div
             style={{ y: ctaY, scale: ctaScale }}
@@ -518,7 +664,7 @@ const Landing = () => {
             </div>
             <div className="border-t border-white/10 pt-10 text-center">
               <p className="text-gray-500 text-base">
-                © 2025 PerpPractice. All rights reserved.
+                © 2025 PaperFi. All rights reserved.
               </p>
             </div>
           </div>
