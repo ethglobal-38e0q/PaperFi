@@ -56,59 +56,44 @@ function handleStreamingData(data) {
 }
 
 function startStreaming(ticker, retries = 3, delay = 3000) {
-  fetch(streamingUrl + "?ticker=" + ticker)
-    .then(response => {
-      const reader = response.body.getReader();
+  let eventSource: EventSource | null = null;
+  let reconnectAttempts = retries;
 
-      function streamData() {
-        reader
-          .read()
-          .then(({ value, done }) => {
-            if (done) {
-              console.error("[stream] Streaming ended.");
-              return;
-            }
+  function connect() {
+    eventSource = new EventSource(streamingUrl + "?ticker=" + ticker);
 
-            // Assuming the streaming data is separated by line breaks
-            const dataStrings = new TextDecoder().decode(value).split("\n");
-            dataStrings.forEach(dataString => {
-              const trimmedDataString = dataString.trim();
-              if (trimmedDataString) {
-                try {
-                  var jsonData = JSON.parse(trimmedDataString);
-                  handleStreamingData(jsonData);
-                } catch (e) {
-                  console.error("Error parsing JSON:", e.message);
-                }
-              }
-            });
-
-            streamData(); // Continue processing the stream
-          })
-          .catch(error => {
-            console.error("[stream] Error reading from stream:", error);
-            attemptReconnect(retries, delay);
-          });
+    eventSource.onmessage = event => {
+      const trimmedDataString = event.data.trim();
+      if (trimmedDataString) {
+        try {
+          const jsonData = JSON.parse(trimmedDataString);
+          handleStreamingData(jsonData);
+        } catch (e) {
+          console.error("Error parsing JSON:", e.message);
+        }
       }
+    };
 
-      streamData();
-    })
-    .catch(error => {
-      console.error(
-        "[stream] Error fetching from the streaming endpoint:",
-        error
-      );
-    });
-  function attemptReconnect(retriesLeft, delay) {
-    if (retriesLeft > 0) {
+    eventSource.onerror = error => {
+      console.error("[stream] SSE connection error:", error);
+      eventSource?.close();
+      attemptReconnect();
+    };
+  }
+
+  function attemptReconnect() {
+    if (reconnectAttempts > 0) {
       console.log(`[stream] Attempting to reconnect in ${delay}ms...`);
       setTimeout(() => {
-        startStreaming(retriesLeft - 1, delay);
+        reconnectAttempts--;
+        connect();
       }, delay);
     } else {
       console.error("[stream] Maximum reconnection attempts reached.");
     }
   }
+
+  connect();
 }
 
 function getNextBarTime(barTime, resolution) {
