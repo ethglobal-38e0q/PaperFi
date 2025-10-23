@@ -193,8 +193,7 @@ export const heatmapData = (() => {
     // All numerical values set to 0
     data.push({
       date: dateString,
-      count: 0,
-      pnl: 0,
+      pnl: (Math.floor(Math.random() * 21) - 10) * 10,
     });
   }
 

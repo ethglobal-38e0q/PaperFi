@@ -14,12 +14,11 @@ const Heatmap = () => {
     }
   });
 
-  const getIntensityColor = (count: number) => {
-    if (count === 0) return "bg-muted/30";
-    if (count <= 3) return "bg-success/20";
-    if (count <= 6) return "bg-success/40";
-    if (count <= 9) return "bg-success/60";
-    return "bg-success/80";
+  const getIntensityColor = (pnl: number) => {
+    if (pnl === 0) return "bg-muted/30";
+    const opacity = Math.floor(Math.abs(pnl));
+    const color = pnl > 0 ? "bg-success" : "bg-loss";
+    return `${color}/${opacity}`;
   };
 
   return (
@@ -37,7 +36,7 @@ const Heatmap = () => {
               <div
                 key={`${weekIndex}-${dayIndex}`}
                 data-day={day.date}
-                className={`w-3 h-3 rounded-sm ${getIntensityColor(day.count)} transition-all hover:ring-2 hover:ring-primary/50 cursor-pointer`}
+                className={`w-3 h-3 rounded-sm ${getIntensityColor(day.pnl)} transition-all hover:ring-2 hover:ring-primary/50 cursor-pointer`}
                 title={`${day.date}: ${day.count} trades, P&L: ${day.pnl > 0 ? "+" : ""}${day.pnl.toFixed(2)}`}
               />
             ))}
