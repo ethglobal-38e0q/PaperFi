@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import type { R2Bucket } from "@cloudflare/workers-types";
 import { cors } from "hono/cors";
+import axios from "axios";
 
 interface Env {
   R2: R2Bucket;
@@ -14,6 +15,29 @@ app.use(
     origin: ["http://localhost:5173/", "https://paperfi.trade/"],
   })
 );
+
+const target_proxy_base_url =
+  "https://charting-library.tradingview-widget.com/charting_library";
+
+app.get("/api/charts/*", async c => {
+  // Remove "/api/charts" from the path
+  const path = c.req.path.replace(/^\/api\/charts/, "");
+  // Make axios GET request to the stripped path
+  try {
+    const fetchResponse = await fetch(target_proxy_base_url + path);
+    // Set response headers to match fetch response
+    fetchResponse.headers.forEach((value, key) => {
+      c.header(key, value);
+    });
+    const data = await fetchResponse.arrayBuffer();
+    return new Response(data, {
+      status: fetchResponse.status,
+      headers: fetchResponse.headers,
+    });
+  } catch (err) {
+    return c.json({ error: (err as Error).message }, 500);
+  }
+});
 
 // Health check
 app.get("/api/", c => c.json({ status: "ok" }));

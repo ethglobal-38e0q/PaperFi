@@ -1,14 +1,11 @@
-// Assuming you're working in a browser environment that supports fetch and ReadableStream
-const streamingUrl =
-  "https://benchmarks.pyth.network/v1/shims/tradingview/streaming";
+const streamingUrl = "https://api.paperfi.trade/stream";
 const channelToSubscription = new Map();
 
 function handleStreamingData(data) {
   const { id, p, t } = data;
 
   const tradePrice = p;
-  const tradeTime = t; // Multiplying by 1000 to get milliseconds
-
+  const tradeTime = t * 1000; // Multiplying by 1000 to get milliseconds
   const channelString = id;
   const subscriptionItem = channelToSubscription.get(channelString);
 
@@ -17,26 +14,38 @@ function handleStreamingData(data) {
   }
 
   const lastDailyBar = subscriptionItem.lastDailyBar;
-  const nextDailyBarTime = getNextDailyBarTime(lastDailyBar.time);
-  console.log(nextDailyBarTime, tradeTime, lastDailyBar);
   let bar;
-  if (tradeTime >= nextDailyBarTime) {
+  if (!lastDailyBar) {
     bar = {
-      time: nextDailyBarTime,
       open: tradePrice,
       high: tradePrice,
       low: tradePrice,
       close: tradePrice,
+      time: tradeTime,
     };
-    console.log("[stream] Generate new bar", bar);
   } else {
-    bar = {
-      ...lastDailyBar,
-      high: Math.max(lastDailyBar.high, tradePrice),
-      low: Math.min(lastDailyBar.low, tradePrice),
-      close: tradePrice,
-    };
-    console.log("[stream] Update the latest bar by price", tradePrice);
+    const nextBarTime = getNextBarTime(
+      lastDailyBar.time,
+      subscriptionItem.resolution
+    );
+
+    if (tradeTime >= nextBarTime) {
+      bar = {
+        time: nextBarTime,
+        open: tradePrice,
+        high: tradePrice,
+        low: tradePrice,
+        close: tradePrice,
+      };
+    } else {
+      // Otherwise, update the last bar
+      bar = {
+        ...lastDailyBar,
+        high: Math.max(lastDailyBar.high, tradePrice),
+        low: Math.min(lastDailyBar.low, tradePrice),
+        close: tradePrice,
+      };
+    }
   }
 
   subscriptionItem.lastDailyBar = bar;
@@ -46,8 +55,8 @@ function handleStreamingData(data) {
   channelToSubscription.set(channelString, subscriptionItem);
 }
 
-function startStreaming(retries = 3, delay = 3000) {
-  fetch(streamingUrl)
+function startStreaming(ticker, retries = 3, delay = 3000) {
+  fetch(streamingUrl + "?ticker=" + ticker)
     .then(response => {
       const reader = response.body.getReader();
 
@@ -69,7 +78,7 @@ function startStreaming(retries = 3, delay = 3000) {
                   var jsonData = JSON.parse(trimmedDataString);
                   handleStreamingData(jsonData);
                 } catch (e) {
-                  console.error("Error parsing JSON: " + trimmedDataString);
+                  console.error("Error parsing JSON:", e.message);
                 }
               }
             });
@@ -102,12 +111,19 @@ function startStreaming(retries = 3, delay = 3000) {
   }
 }
 
-function getNextDailyBarTime(barTime) {
-  // barTime is in seconds, so add 5 seconds and return a Date object
-  return new Date(barTime + 5).getTime();
-  // const date = new Date()
-  // date.setDate((barTime + 1)*1000)
-  // return date.getTime()
+function getNextBarTime(barTime, resolution) {
+  const date = new Date(barTime);
+  const interval = parseInt(resolution);
+
+  if (resolution === "1D") {
+    date.setUTCDate(date.getUTCDate() + 1);
+    date.setUTCHours(0, 0, 0, 0);
+  } else if (!isNaN(interval)) {
+    // Handles '1' and '60' (minutes)
+    // Add the interval to the current bar's time
+    date.setUTCMinutes(date.getUTCMinutes() + interval);
+  }
+  return date.getTime();
 }
 
 export function subscribeOnStream(
@@ -137,7 +153,7 @@ export function subscribeOnStream(
   );
 
   // Start streaming when the first subscription is made
-  startStreaming();
+  startStreaming(channelString);
 }
 
 export function unsubscribeFromStream(subscriberUID) {

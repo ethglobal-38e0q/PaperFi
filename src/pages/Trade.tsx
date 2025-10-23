@@ -18,6 +18,7 @@ import RecentTradesPanel from "@/components/RecentTradesPanel";
 import TradingViewWidget from "@/components/TradingViewWidget";
 import MarketTicker from "@/components/MarketTicker";
 import { useSidebar } from "@/contexts/SidebarProvider";
+import PerpChartLight from "@/components/charts/PerpChart";
 
 const Trade = () => {
   const [selectedPair, setSelectedPair] = useState("BTCUSDT");
@@ -124,7 +125,7 @@ const Trade = () => {
 
           {/* Main Chart */}
           <div className="glass p-4 rounded-xl h-[500px]">
-            <TradingViewWidget pair={selectedPair} interval={interval} />
+            <PerpChartLight />
           </div>
 
           {/* Additional Market Stats Grid */}
