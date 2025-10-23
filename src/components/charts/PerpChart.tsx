@@ -1,6 +1,23 @@
 import React, { useEffect, useRef } from "react";
 import { subscribeOnStream, unsubscribeFromStream } from "./pythStreaming";
 
+function customPriceFormatter(symbolInfo) {
+  console.log(symbolInfo);
+  return {
+    format: price => {
+      if (price >= 100000) {
+        return price.toFixed(0);
+      } else if (price >= 1000) {
+        return price.toFixed(2);
+      } else if (price >= 1) {
+        return price.toFixed(3);
+      } else {
+        return price.toFixed(5);
+      }
+    },
+  };
+}
+
 export default function PerpChartLight() {
   const chartContainerRef = useRef();
 
@@ -26,6 +43,9 @@ export default function PerpChartLight() {
       theme: "dark",
       disabled_features: [],
       enabled_features: [],
+      custom_formatters: {
+        priceFormatterFactory: customPriceFormatter,
+      },
     };
 
     const tvWidget = new window.TradingView.widget(widgetOptions);
