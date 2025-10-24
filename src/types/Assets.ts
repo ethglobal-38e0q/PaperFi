@@ -1,4 +1,5 @@
 export interface HermesAsset {
+  id: string;
   attributes: {
     asset_type: string;
     base: string;

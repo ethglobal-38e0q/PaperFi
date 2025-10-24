@@ -50,13 +50,8 @@ const Navbar = () => {
           {/* User Avatar */}
           {user && (
             <>
-              <Link to="/app/settings">
-                <Button variant="ghost" size="icon">
-                  <Settings className="w-5 h-5" />
-                </Button>
-              </Link>
               <Link
-                to="/app/profile"
+                to="/app/settings"
                 className="flex items-center gap-2 p-1 rounded-lg hover:bg-muted/50 transition-colors"
               >
                 <Avatar className="w-8 h-8">

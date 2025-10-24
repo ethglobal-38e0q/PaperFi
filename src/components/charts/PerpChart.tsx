@@ -18,10 +18,11 @@ function customPriceFormatter(symbolInfo) {
   };
 }
 
-export default function PerpChartLight() {
+export default function PerpChartLight({ ticker }) {
   const chartContainerRef = useRef();
 
   useEffect(() => {
+    if (!ticker) return;
     const datafeed = new window.Datafeeds.UDFCompatibleDatafeed(
       "https://benchmarks.pyth.network/v1/shims/tradingview"
     );
@@ -35,7 +36,7 @@ export default function PerpChartLight() {
       fullscreen: false,
       autosize: true,
       allow_symbol_change: false,
-      symbol: "Crypto.BTC/USD",
+      symbol: ticker,
       interval: "2",
       container: "TVChartContainer",
       timeframe: "1H",
@@ -72,7 +73,7 @@ export default function PerpChartLight() {
     return () => {
       tvWidget.remove();
     };
-  }, []);
+  }, [ticker]);
 
   return (
     <div

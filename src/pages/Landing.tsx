@@ -167,16 +167,6 @@ const Landing = () => {
                     </span>
                   </Button>
                 </Link>
-                <Link to="/app/leaderboard">
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="gap-2 border-white/20 text-white hover:bg-white/10 bg-transparent"
-                  >
-                    <Trophy className="w-5 h-5" />
-                    View Leaderboard
-                  </Button>
-                </Link>
               </div>
 
               <motion.div

@@ -161,7 +161,10 @@ const Launchpad = () => {
   );
 
   const handleAssetClick = (asset: HermesAsset) => {
-    window.open(`/app/trade?pair=${asset.attributes.symbol}`, "_blank");
+    window.open(
+      `/app/trade?pair=${asset.attributes.symbol}&id=${asset.id}`,
+      "_blank"
+    );
   };
 
   const stats = [

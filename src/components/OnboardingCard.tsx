@@ -34,7 +34,6 @@ export function OnboardCard() {
       setAvatar(file);
       setUploading(true);
       setProgress(0);
-      // todo: upload avatar to r2 here and then uncomment next 2 lines.
       const url = await uploadAvatar(file, user.id);
       console.log("Uploaded avatar URL:", url);
 

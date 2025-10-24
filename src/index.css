@@ -31,8 +31,8 @@ All colors MUST be HSL.
     --muted-foreground: 215 15% 65%;
 
     /* Teal accent */
-    --accent: 174 72% 56%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 215 27.9% 16.9%;
+    --accent-foreground: 210 20% 98%;
 
     /* Success/Loss colors */
     --success: 142 76% 36%;
