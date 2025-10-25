@@ -57,7 +57,7 @@ const Navbar = () => {
           {user && (
             <div className="hidden md:flex items-center gap-2">
               {/* PYUSD Balance */}
-              <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-primary/10 border border-primary/20 hover:bg-primary/15 transition-colors">
+              <div className="flex items-center gap-2 px-3 py-2 rounded-lg  border border-primary/20 hover:bg-primary/15 transition-colors">
                 
                 <img src="/pyusd.png" alt="" className=" w-8 h-8"/>
                 <div className="flex flex-col">
@@ -66,7 +66,7 @@ const Navbar = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-secondary/10 border border-secondary/20 hover:bg-secondary/15 transition-colors">
+              <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-secondary/20 hover:bg-secondary/15 transition-colors">
                 <Wallet className="w-4 h-4 text-secondary" />
                 <div className="flex flex-col">
                   <span className="text-xs text-muted-foreground font-medium">Paper Balance</span>
