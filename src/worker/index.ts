@@ -16,15 +16,71 @@ app.use(
   })
 );
 
-const target_proxy_base_url =
+const chart_proxy_base_url =
   "https://charting-library.tradingview-widget.com/charting_library";
+const datafeed_proxy_base_url =
+  "https://benchmarks.pyth.network/v1/shims/tradingview";
 
 app.get("/api/charts/*", async c => {
   // Remove "/api/charts" from the path
   const path = c.req.path.replace(/^\/api\/charts/, "");
-  // Make axios GET request to the stripped path
+  // Get query params and append to the proxied URL
+  const query = c.req.url.split("?")[1];
+  const url = chart_proxy_base_url + path + (query ? `?${query}` : "");
   try {
-    const fetchResponse = await fetch(target_proxy_base_url + path);
+    const fetchResponse = await fetch(url);
+    // Set response headers to match fetch response
+    fetchResponse.headers.forEach((value, key) => {
+      c.header(key, value);
+    });
+    const data = await fetchResponse.arrayBuffer();
+    return new Response(data, {
+      status: fetchResponse.status,
+      headers: fetchResponse.headers,
+    });
+  } catch (err) {
+    return c.json({ error: (err as Error).message }, 500);
+  }
+});
+
+app.get("/api/datafeed/config", async c => {
+  return c.json(
+    {
+      supported_resolutions: [
+        "1",
+        "2",
+        "5",
+        "15",
+        "30",
+        "60",
+        "120",
+        "240",
+        "360",
+        "720",
+        "D",
+        "1D",
+        "W",
+        "1W",
+        "M",
+        "1M",
+      ],
+      supports_group_request: false,
+      supports_marks: true,
+      supports_search: true,
+      supports_timescale_marks: false,
+    },
+    200
+  );
+});
+
+app.get("/api/datafeed/*", async c => {
+  // Remove "/api/charts" from the path
+  const path = c.req.path.replace(/^\/api\/datafeed/, "");
+  // Get query params and append to the proxied URL
+  const query = c.req.url.split("?")[1];
+  const url = datafeed_proxy_base_url + path + (query ? `?${query}` : "");
+  try {
+    const fetchResponse = await fetch(url);
     // Set response headers to match fetch response
     fetchResponse.headers.forEach((value, key) => {
       c.header(key, value);
