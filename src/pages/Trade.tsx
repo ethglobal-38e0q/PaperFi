@@ -19,12 +19,14 @@ import PerpChartLight from "@/components/charts/PerpChart";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import TickerTapeWidget from "@/components/charts/TickerTape";
 import { toast } from "@/hooks/use-toast";
+import { customPriceFormatter } from "@/lib/utils";
 
 const Trade = () => {
   const [orderType, setOrderType] = useState<"LONG" | "SHORT">("LONG");
   const [size, setSize] = useState("");
   const [leverage, setLeverage] = useState("10");
   const [interval, setInterval] = useState("5m");
+  const [currentPrice, setCurrentPrice] = useState(0);
   const sidebar = useSidebar();
   const [params] = useSearchParams();
   const navigate = useNavigate();
@@ -38,6 +40,36 @@ const Trade = () => {
     .replace("CRYPTO.", "")
     .split("/")[1];
   const selectedId = params.get("id") || "";
+  // {,"parsed":[{"id":"e62df6c8b4a85fe1a67db44dc12de5db330f7ac66b72dc658afedf0f4a415b43","price":{"price":"11168649121012","conf":"3107879000","expo":-8,"publish_time":1761380527},"ema_price":{"price":"11149926300000","conf":"2985501700","expo":-8,"publish_time":1761380527},"metadata":{"slot":250886514,"proof_available_time":1761380528,"prev_publish_time":1761380526}}]}
+
+  useEffect(() => {
+    // Connect to SSE EventSource for price updates
+    const eventSource = new EventSource(
+      `https://hermes.pyth.network/v2/updates/price/stream?ids%5B%5D=${selectedId}&parsed=true`
+    );
+    eventSource.onmessage = event => {
+      try {
+        const data = JSON.parse(event.data);
+        if (data.parsed && data.parsed[0].price) {
+          const price = BigInt(data.parsed[0].price.price);
+          const expo = data.parsed[0].price.expo;
+          const formattedPrice = customPriceFormatter(null).format(
+            Number(price) * Math.pow(10, expo)
+          );
+
+          setCurrentPrice(formattedPrice);
+        }
+      } catch (e) {
+        // Ignore parse errors
+      }
+    };
+    eventSource.onerror = () => {
+      eventSource.close();
+    };
+    return () => {
+      eventSource.close();
+    };
+  }, [selectedId]);
 
   useEffect(() => {
     sidebar.close();
@@ -54,7 +86,7 @@ const Trade = () => {
 
       {/* Main Trading Grid - Complex Multi-Panel Layout */}
       <div
-        className="h-[calc(100vh-156px)] grid gap-3 mt-4"
+        className="h-[calc(100vh-160px)] grid gap-3 mt-4"
         style={{
           gridTemplateColumns: "repeat(12, 1fr)",
           gridTemplateRows: "1fr 1fr 1fr",
@@ -62,44 +94,22 @@ const Trade = () => {
       >
         {/* Left Column - Order Book + Depth Chart */}
         <div className="row-span-2 lg:col-span-2 space-y-4">
-          <OrderBook pair={selectedPair} />
+          <OrderBook pair={selectedPair} currentPrice={currentPrice} />
         </div>
 
         {/* Center Column - Chart + Market Info */}
-        <div className="col-[3/10] row-[1/3] space-y-4 flex flex-col">
-          <div className="grid grid-cols-4 gap-1">
-            <div className="glass p-2 rounded-lg col-span-1">
-              <h2 className="text-2xl font-bold">
-                {selectedPair.replace("Crypto.", "")}
-              </h2>
-              <div className="flex items-baseline gap-4 mt-1">
-                <p className="text-4xl font-bold font-mono">$0</p>
-                <p className={`text-xl font-semibold text-success`}>+0%</p>
-              </div>
+        <div className="col-[3/10] row-[1/3] space-y-1 flex flex-col">
+          <div className=" rounded-lg flex [&_div]:py-1 [&_div]:px-3">
+            <div className="flex-1 glass rounded-l-lg text-yellow-500">
+              {selectedPair.replace("Crypto.", "")}
             </div>
-            <div className="glass p-2 rounded-lg flex-groZ">
-              <p className="text-xs text-muted-foreground mb-1">Funding Rate</p>
-              <p className="text-lg font-bold">0.0125%</p>
-              <p className="text-xs text-muted-foreground">Next: 4h 23m</p>
-            </div>
-            <div className="glass p-2 rounded-lg">
-              <p className="text-xs text-muted-foreground mb-1">Index Price</p>
-              <p className="text-lg font-bold">$0</p>
-              <p className="text-xs text-muted-foreground">
-                Mark: ${(1.0001).toFixed(2)}
-              </p>
-            </div>
-            <div className="glass p-2 rounded-lg">
-              <p className="text-xs text-muted-foreground mb-1">
-                Long/Short Ratio
-              </p>
-              <p className="text-lg font-bold">52.3% / 47.7%</p>
-              <p className="text-xs text-success">Bullish</p>
-            </div>
+            <div className="flex-1 glass text-yellow-500">${currentPrice}</div>
+            <div className="flex-1 glass"></div>
+            <div className="flex-1 glass rounded-r-lg"></div>
           </div>
 
           {/* Main Chart */}
-          <div className="glass p-4 rounded-xl flex-grow">
+          <div className="glass p-1 rounded-xl flex-grow">
             <PerpChartLight ticker={selectedPair} />
           </div>
         </div>
@@ -252,7 +262,7 @@ const Trade = () => {
           </div>
 
           {/* Recent Trades */}
-          <div className="h-[380px]">
+          <div className="">
             <RecentTradesPanel pair={selectedPair} />
           </div>
         </div>

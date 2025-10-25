@@ -20,3 +20,19 @@ export async function uploadAvatar(file: File, userId: string) {
   const data = await res.json();
   return data.url; // Public R2 URL
 }
+
+export function customPriceFormatter(symbolInfo) {
+  return {
+    format: price => {
+      if (price >= 100000) {
+        return price.toFixed(0);
+      } else if (price >= 1000) {
+        return price.toFixed(2);
+      } else if (price >= 1) {
+        return price.toFixed(3);
+      } else {
+        return price.toFixed(5);
+      }
+    },
+  };
+}

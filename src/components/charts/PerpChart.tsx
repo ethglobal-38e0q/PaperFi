@@ -1,22 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { subscribeOnStream, unsubscribeFromStream } from "./pythStreaming";
-
-function customPriceFormatter(symbolInfo) {
-  console.log(symbolInfo);
-  return {
-    format: price => {
-      if (price >= 100000) {
-        return price.toFixed(0);
-      } else if (price >= 1000) {
-        return price.toFixed(2);
-      } else if (price >= 1) {
-        return price.toFixed(3);
-      } else {
-        return price.toFixed(5);
-      }
-    },
-  };
-}
+import { customPriceFormatter } from "@/lib/utils";
 
 export default function PerpChartLight({ ticker }) {
   const chartContainerRef = useRef();

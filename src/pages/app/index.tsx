@@ -18,9 +18,7 @@ const AppLayout = () => {
     <SidebarProvider>
       <div className="flex h-full">
         <Sidebar />
-        <main className="overflow-clip max-h-screen flex-grow">
-          {user && <Outlet />}
-        </main>
+        <main className="overflow-auto flex-grow">{user && <Outlet />}</main>
         {/*<Footer />*/}
       </div>
     </SidebarProvider>
