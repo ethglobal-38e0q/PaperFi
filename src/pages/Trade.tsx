@@ -20,11 +20,12 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import TickerTapeWidget from "@/components/charts/TickerTape";
 import { toast } from "@/hooks/use-toast";
 import { customPriceFormatter } from "@/lib/utils";
+import { Slider } from "@/components/ui/slider";
 
 const Trade = () => {
   const [orderType, setOrderType] = useState<"LONG" | "SHORT">("LONG");
   const [size, setSize] = useState("");
-  const [leverage, setLeverage] = useState("10");
+  const [leverage, setLeverage] = useState([0]);
   const [interval, setInterval] = useState("5m");
   const [currentPrice, setCurrentPrice] = useState(0);
   const sidebar = useSidebar();
@@ -157,7 +158,7 @@ const Trade = () => {
                 className="mt-1 h-9"
               />
               <div className="flex gap-2 mt-2">
-                {["25%", "50%", "75%", "100%"].map(percent => (
+                {/*{["25%", "50%", "75%", "100%"].map(percent => (
                   <Button
                     key={percent}
                     variant="ghost"
@@ -166,26 +167,34 @@ const Trade = () => {
                   >
                     {percent}
                   </Button>
-                ))}
+                ))}*/}
               </div>
             </div>
 
             <div>
-              <Label className="text-xs">Leverage</Label>
-              <div className="flex gap-2 mt-1">
-                {["5x", "10x", "20x", "50x", "100x"].map(lev => (
-                  <Button
-                    key={lev}
-                    variant={
-                      leverage === lev.replace("x", "") ? "default" : "outline"
-                    }
-                    size="sm"
-                    onClick={() => setLeverage(lev.replace("x", ""))}
-                    className="flex-1 text-xs h-8"
-                  >
-                    {lev}
-                  </Button>
-                ))}
+              <div className="flex w-full max-w-md flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <Label className="text-xs">Leverage</Label>
+                  <span className="text-muted-foreground text-sm">
+                    {leverage[0]}
+                  </span>
+                </div>
+                <Slider
+                  max={125}
+                  min={0}
+                  onValueChange={setLeverage}
+                  step={25}
+                  value={leverage}
+                  className="text-green-500"
+                />
+                <div className="flex items-center justify-between text-muted-foreground text-xs tabular-nums">
+                  <span className="w-6 text-left">0</span>
+                  <span className="w-6 text-center">25</span>
+                  <span className="w-6 text-center">50</span>
+                  <span className="w-6 text-center">75</span>
+                  <span className="w-6 text-right">100</span>
+                  <span className="w-6 text-right">125</span>
+                </div>
               </div>
             </div>
 
@@ -211,7 +220,7 @@ const Trade = () => {
             <div className="bg-muted/30 p-3 rounded-lg text-xs space-y-1 mt-2">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Entry Price</span>
-                <span className="font-semibold font-mono">$0</span>
+                <span className="font-semibold font-mono">${currentPrice}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Est. Liq. Price</span>
