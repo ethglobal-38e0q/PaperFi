@@ -115,7 +115,7 @@ app.post("/api/avatar", async c => {
       httpMetadata: { contentType: file.type },
     });
 
-    const publicUrl = `https://cdn.paper.19700102.xyz/${objectKey}`;
+    const publicUrl = `https://cdn.paper.19700102.xyz/${objectKey}?t=${Date.now()}`;
     return c.json({ url: publicUrl });
   } catch (err) {
     return c.json({ error: (err as Error).message }, 500);
