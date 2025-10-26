@@ -1,10 +1,18 @@
-"use client"
+"use client";
 
-import { Target, Trophy, Zap, Clock, CheckCircle, Sparkles } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { motion, AnimatePresence } from "framer-motion"
-import { useState } from "react"
-import { useAccount } from "wagmi"
+import {
+  Target,
+  Trophy,
+  Zap,
+  Clock,
+  CheckCircle,
+  Sparkles,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { useAccount } from "wagmi";
+import axios from "axios";
 
 const Confetti = ({ isActive }: { isActive: boolean }) => {
   const confetti = Array.from({ length: 50 }).map((_, i) => ({
@@ -12,18 +20,22 @@ const Confetti = ({ isActive }: { isActive: boolean }) => {
     left: Math.random() * 100,
     delay: Math.random() * 0.5,
     duration: 2 + Math.random() * 1,
-  }))
+  }));
 
   return (
     <AnimatePresence>
       {isActive && (
         <div className="fixed inset-0 pointer-events-none overflow-hidden">
-          {confetti.map((item) => (
+          {confetti.map(item => (
             <motion.div
               key={item.id}
               initial={{ y: -10, opacity: 1, rotate: 0 }}
               animate={{ y: window.innerHeight + 10, opacity: 0, rotate: 360 }}
-              transition={{ duration: item.duration, delay: item.delay, ease: "easeIn" }}
+              transition={{
+                duration: item.duration,
+                delay: item.delay,
+                ease: "easeIn",
+              }}
               className="absolute w-2 h-2 bg-gradient-to-r from-primary to-secondary rounded-full"
               style={{ left: `${item.left}%` }}
             />
@@ -31,17 +43,17 @@ const Confetti = ({ isActive }: { isActive: boolean }) => {
         </div>
       )}
     </AnimatePresence>
-  )
-}
+  );
+};
 
 const CongratulationsModal = ({
   isOpen,
   reward,
   onClose,
 }: {
-  isOpen: boolean
-  reward: string
-  onClose: () => void
+  isOpen: boolean;
+  reward: string;
+  onClose: () => void;
 }) => {
   return (
     <AnimatePresence>
@@ -59,13 +71,19 @@ const CongratulationsModal = ({
             exit={{ scale: 0, rotate: 10 }}
             transition={{ type: "spring", stiffness: 200, damping: 20 }}
             className="bg-gradient-to-br from-primary/20 to-secondary/20 backdrop-blur-xl border border-primary/30 rounded-2xl p-8 text-center max-w-md"
-            onClick={(e) => e.stopPropagation()}
+            onClick={e => e.stopPropagation()}
           >
-            <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 0.6, repeat: 2 }} className="mb-4">
+            <motion.div
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 0.6, repeat: 2 }}
+              className="mb-4"
+            >
               {/* <Sparkles className="w-16 h-16 text-primary mx-auto" /> */}
             </motion.div>
             <h2 className="text-3xl font-bold mb-2">Congratulations!</h2>
-            <p className="text-muted-foreground mb-2">You've completed the challenge</p>
+            <p className="text-muted-foreground mb-2">
+              You've completed the challenge
+            </p>
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
@@ -74,24 +92,29 @@ const CongratulationsModal = ({
             >
               <p className="text-2xl font-bold text-white">+{reward}</p>
             </motion.div>
-            <p className="text-sm text-muted-foreground mb-6">Your PayPal USD has been credited to your account</p>
-            <Button onClick={onClose} className="w-full bg-primary hover:bg-primary/90">
+            <p className="text-sm text-muted-foreground mb-6">
+              Your PayPal USD has been credited to your account
+            </p>
+            <Button
+              onClick={onClose}
+              className="w-full bg-primary hover:bg-primary/90"
+            >
               Awesome!
             </Button>
           </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
-  )
-}
+  );
+};
 
 const Challenges = () => {
-  const [completedChallenges, setCompletedChallenges] = useState<number[]>([])
-  const [claimedChallenges, setClaimedChallenges] = useState<number[]>([])
-  const [showCongrats, setShowCongrats] = useState(false)
-  const [celebratingReward, setCelebratingReward] = useState("")
-  const [celebratingId, setCelebratingId] = useState<number | null>(null)
-  const {address} = useAccount();
+  const [completedChallenges, setCompletedChallenges] = useState<number[]>([]);
+  const [claimedChallenges, setClaimedChallenges] = useState<number[]>([]);
+  const [showCongrats, setShowCongrats] = useState(false);
+  const [celebratingReward, setCelebratingReward] = useState("");
+  const [celebratingId, setCelebratingId] = useState<number | null>(null);
+  const { address } = useAccount();
   console.log(address);
 
   const activeChallenges = [
@@ -101,7 +124,7 @@ const Challenges = () => {
       description: "Maintain a winning streak of 5 trades",
       progress: 5,
       target: 5,
-      reward: "0.5 PUSD",
+      reward: 0.5,
       timeLeft: "2 days",
       difficulty: "Medium",
     },
@@ -111,7 +134,7 @@ const Challenges = () => {
       description: "Complete 50 trades this month",
       progress: 32,
       target: 50,
-      reward: "10 PUSD",
+      reward: 10,
       timeLeft: "12 days",
       difficulty: "Hard",
     },
@@ -121,28 +144,28 @@ const Challenges = () => {
       description: "Achieve $500 P&L in a single week",
       progress: 245.5,
       target: 500,
-      reward: "7.50 PUSD",
+      reward: 7.5,
       timeLeft: "4 days",
       difficulty: "Medium",
     },
-  ]
+  ];
 
   const upcomingChallenges = [
     {
       id: 4,
       title: "Diamond Hands",
       description: "Hold a position for 24+ hours profitably",
-      reward: "3 PUSD",
+      reward: 3,
       difficulty: "Easy",
     },
     {
       id: 5,
       title: "Risk Manager",
       description: "Complete 20 trades with max 2% loss each",
-      reward: "8 PUSD",
+      reward: 8,
       difficulty: "Hard",
     },
-  ]
+  ];
 
   // const handleClaimReward = (challengeId: number, reward: string) => {
   //   setCelebratingId(challengeId)
@@ -151,57 +174,58 @@ const Challenges = () => {
   //   setClaimedChallenges([...claimedChallenges, challengeId])
   // }
 
-  const handleClaimReward = async (challengeId: number, reward: string) => {
-  try {
-    if (!address) throw new Error("Wallet not connected");
-
+  const handleClaimReward = async (challengeId: number, reward: numberr) => {
     // Build the URL with query params
-    const url = `/api/pyusd?wallet=${address}&challengeId=${challengeId}&reward=${encodeURIComponent(reward)}`;
-
-    const res = await fetch(url, {
-      method: "GET",
-    });
-
-    if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData.message || "Failed to claim reward");
+    const url = `/api/pyusd?wallet=${address}&challengeId=${challengeId}&reward=${reward}`;
+    try {
+      const res = await axios.get(url);
+      setCelebratingId(challengeId);
+      setCelebratingReward(reward);
+      setShowCongrats(true);
+      setClaimedChallenges(prev => [...prev, challengeId]);
+    } catch (err) {
+      console.error("Claim reward error:", err);
+      throw new Error(err.message || "Failed to claim reward");
     }
-
-    // On success, update UI
-    setCelebratingId(challengeId);
-    setCelebratingReward(reward);
-    setShowCongrats(true);
-    setClaimedChallenges((prev) => [...prev, challengeId]);
-  } catch (err: any) {
-    console.error("Claim reward error:", err);
-    alert(err.message || "Something went wrong while claiming the reward");
-  }
-};
-
-
+  };
 
   const handleCloseCongrats = () => {
-    setShowCongrats(false)
-    setCelebratingId(null)
-  }
+    setShowCongrats(false);
+    setCelebratingId(null);
+  };
 
   return (
     <div className="p-6 space-y-6">
       <Confetti isActive={showCongrats} />
-      <CongratulationsModal isOpen={showCongrats} reward={celebratingReward} onClose={handleCloseCongrats} />
+      <CongratulationsModal
+        isOpen={showCongrats}
+        reward={celebratingReward}
+        onClose={handleCloseCongrats}
+      />
 
       {/* Header */}
-      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="glass p-6 rounded-xl">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="glass p-6 rounded-xl"
+      >
         <div className="flex items-center gap-3 mb-2">
           <motion.div
             animate={{ rotate: 360 }}
-            transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+            transition={{
+              duration: 3,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "linear",
+            }}
           >
             <Target className="w-8 h-8 text-primary" />
           </motion.div>
           <h1 className="text-3xl font-bold">Challenges</h1>
         </div>
-        <p className="text-muted-foreground">Complete challenges to earn PayPal USD (PUSD) and climb the leaderboard</p>
+        <p className="text-muted-foreground">
+          Complete challenges to earn PayPal USD (PYUSD) and climb the
+          leaderboard
+        </p>
       </motion.div>
 
       {/* Active Challenges */}
@@ -209,9 +233,10 @@ const Challenges = () => {
         <h2 className="text-xl font-bold mb-4">Active Challenges</h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {activeChallenges.map((challenge, index) => {
-            const progressPercent = (challenge.progress / challenge.target) * 100
-            const isCompleted = challenge.progress >= challenge.target
-            const isClaimed = claimedChallenges.includes(challenge.id)
+            const progressPercent =
+              (challenge.progress / challenge.target) * 100;
+            const isCompleted = challenge.progress >= challenge.target;
+            const isClaimed = claimedChallenges.includes(challenge.id);
 
             return (
               <motion.div
@@ -242,7 +267,9 @@ const Challenges = () => {
                         </motion.div>
                       )}
                     </div>
-                    <p className="text-sm text-muted-foreground">{challenge.description}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {challenge.description}
+                    </p>
                   </div>
                   <span
                     className={`px-3 py-1 rounded-full text-xs font-semibold ${
@@ -280,9 +307,14 @@ const Challenges = () => {
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4 text-sm">
-                    <motion.div className="flex items-center gap-1 text-accent" whileHover={{ scale: 1.1 }}>
+                    <motion.div
+                      className="flex items-center gap-1 text-accent"
+                      whileHover={{ scale: 1.1 }}
+                    >
                       <Trophy className="w-4 h-4" />
-                      <span className="font-semibold">{challenge.reward}</span>
+                      <span className="font-semibold">
+                        {challenge.reward} PYUSD
+                      </span>
                     </motion.div>
                     {!isCompleted && (
                       <div className="flex items-center gap-1 text-muted-foreground">
@@ -292,17 +324,27 @@ const Challenges = () => {
                     )}
                   </div>
                   {isClaimed ? (
-                    <Button size="sm" variant="outline" disabled className="text-success bg-transparent">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      disabled
+                      className="text-success bg-transparent"
+                    >
                       ✓ Claimed
                     </Button>
                   ) : isCompleted ? (
-                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
                       <Button
                         size="sm"
                         className="bg-success hover:bg-success/90 text-white"
-                        onClick={() => handleClaimReward(challenge.id, challenge.reward)}
+                        onClick={() =>
+                          handleClaimReward(challenge.id, challenge.reward)
+                        }
                       >
-                        Claim {challenge.reward}
+                        Claim {challenge.reward} PYUSD
                       </Button>
                     </motion.div>
                   ) : (
@@ -312,7 +354,7 @@ const Challenges = () => {
                   )}
                 </div>
               </motion.div>
-            )
+            );
           })}
         </div>
       </div>
@@ -333,7 +375,9 @@ const Challenges = () => {
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h3 className="text-lg font-bold mb-1">{challenge.title}</h3>
-                  <p className="text-sm text-muted-foreground">{challenge.description}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {challenge.description}
+                  </p>
                 </div>
                 <span
                   className={`px-3 py-1 rounded-full text-xs font-semibold ${
@@ -351,7 +395,9 @@ const Challenges = () => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1 text-accent">
                   <Trophy className="w-4 h-4" />
-                  <span className="font-semibold text-sm">{challenge.reward}</span>
+                  <span className="font-semibold text-sm">
+                    {challenge.reward}
+                  </span>
                 </div>
                 <Button size="sm" variant="outline" disabled>
                   Coming Soon
@@ -370,20 +416,24 @@ const Challenges = () => {
         whileHover={{ scale: 1.02 }}
         className="glass p-8 rounded-xl text-center bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5"
       >
-        <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}>
+        <motion.div
+          animate={{ y: [0, -10, 0] }}
+          transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+        >
           <Zap className="w-16 h-16 text-primary mx-auto mb-4" />
         </motion.div>
         <h2 className="text-2xl font-bold mb-2">Compete for Glory</h2>
         <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-          Complete challenges to earn PayPal USD (PUSD) and climb the global leaderboard. Top performers get exclusive
-          funding opportunities and real cryptocurrency rewards!
+          Complete challenges to earn PayPal USD (PYUSD) and climb the global
+          leaderboard. Top performers get exclusive funding opportunities and
+          real cryptocurrency rewards!
         </p>
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
           <Button className="glow-primary">View Leaderboard</Button>
         </motion.div>
       </motion.div>
     </div>
-  )
-}
+  );
+};
 
-export default Challenges
+export default Challenges;

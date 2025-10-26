@@ -1,6 +1,7 @@
 # Top-level configuration
 name = "paper"
-compatibility_date = "2025-01-01"
+compatibility_flags = [ "nodejs_compat" ]
+compatibility_date = "2025-10-01"
 main = "./src/worker/index.ts"
 
 workers_dev = false
