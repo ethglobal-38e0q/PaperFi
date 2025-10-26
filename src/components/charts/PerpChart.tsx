@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { subscribeOnStream, unsubscribeFromStream } from "./pythStreaming";
 import { customPriceFormatter } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthProvider";
+import { RawTrade } from "@/types";
 
 export default function PerpChartLight({ ticker }) {
   const chartContainerRef = useRef();
@@ -19,9 +20,8 @@ export default function PerpChartLight({ ticker }) {
       .select("*")
       .gte("timestamp", new Date(startDate * 1000).toISOString())
       .lte("timestamp", new Date(endDate * 1000).toISOString())
-      .eq("order_type", "OPEN")
       .eq("user_id", user.id)
-      .then(({ data, error }) => {
+      .then(({ data, error }: { data: RawTrade[] }) => {
         if (error || !data) {
           console.error("Error fetching trades:", error);
         } else {
@@ -30,7 +30,11 @@ export default function PerpChartLight({ ticker }) {
             id: trade.id,
             time: Math.floor(new Date(trade.timestamp).getTime() / 1000),
             color: trade.order_type === "OPEN" ? "green" : "red",
-            text: [""],
+            text: [
+              `${trade.order_type ? "OPENED" : "CLOSED"} a ${trade.trade_type === "LONG" ? "LONG" : "SHORT"} position.`,
+              `\nMargin: ${trade.margin}`,
+              `\nLeverage  : ${trade.leverage}`,
+            ],
             label: trade.trade_type === "LONG" ? "L" : "S",
             labelFontColor: "white",
             minSize: 25,
