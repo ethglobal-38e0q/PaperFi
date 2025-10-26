@@ -160,3 +160,33 @@ export function unsubscribeFromStream(subscriberUID) {
     }
   }
 }
+
+export const onReady = callback => {
+  console.log("[onReady]: Method call");
+  setTimeout(() =>
+    callback({
+      supported_resolutions: [
+        "1",
+        "2",
+        "5",
+        "15",
+        "30",
+        "60",
+        "120",
+        "240",
+        "360",
+        "720",
+        "D",
+        "1D",
+        "W",
+        "1W",
+        "M",
+        "1M",
+      ],
+      supports_group_request: false,
+      supports_marks: true,
+      supports_search: true,
+      supports_timescale_marks: false,
+    })
+  );
+};
