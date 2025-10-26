@@ -1,232 +1,284 @@
-# PaperFi - Crypto Trading Practice Platform
+# PaperFi - Crypto Perpetuals Trading Simulator
 
-A fully responsive, production-ready frontend for a simulated perpetuals trading platform. Built with React, TypeScript, TailwindCSS, and Framer Motion.
+PaperFi is a sophisticated crypto trading simulator that allows users to practice perpetual futures trading with real market data in a completely risk-free environment. Built with modern web technologies and integrated with Pyth Network for real-time price feeds, PaperFi provides an authentic trading experience without financial risk.
 
 ## 🚀 Features
 
-### Core Platform Features
+### Core Trading Features
 
-- **Landing Page** - Hero section with animated stats, features showcase, and CTAs
-- **Authentication** - Login/Signup pages with wallet connection support
-- **Trading Terminal** - Real-time simulated trading interface with live charts
-- **Dashboard** - Performance overview with heatmaps, P&L charts, and recent trades
-- **Analytics** - Deep dive into trading performance with multiple chart types
-- **Leaderboard** - Global rankings with search and filtering
-- **Portfolio** - Capital allocation tracking and position management
-- **Client Portal** - Browse and fund top traders
-- **Challenges** - Gamified achievement system
-- **Settings** - Complete profile and preference management
+- **Real-time Trading Simulation** - Practice perpetual futures trading with live market data
+- **Multiple Asset Support** - Trade BTC, ETH, SOL, BNB, XRP and dozens of other crypto assets
+- **Live Price Feeds** - Real-time price updates powered by Pyth Network
+- **Advanced Charting** - Professional TradingView charts with technical indicators
+- **Portfolio Management** - Track positions, P&L, and trading performance
+- **Risk Management** - Configurable leverage (up to 125x) and margin requirements
 
-### Design & UX
+### Platform Features
 
-- Dark theme with electric blue/purple neon accents
-- Glassmorphism effects and subtle glows
-- Smooth Framer Motion animations
-- Fully responsive (mobile, tablet, desktop)
-- Professional crypto trading terminal aesthetic
-- GitHub-style activity heatmaps
-- Real-time data simulations
+- **Trading Dashboard** - Comprehensive overview of trading performance and metrics
+- **Leaderboards** - Compete with other traders and climb the rankings
+- **Analytics** - Detailed performance analysis with charts and insights
+- **Client Funding** - Get funded by real clients based on your trading performance
+- **Challenges** - Gamified achievement system to improve trading skills
+- **Social Features** - Follow top traders and learn from their strategies
 
-### Technical Highlights
+### Technical Features
 
-- **React 18** with TypeScript
-- **TailwindCSS** with custom design system
-- **Recharts** for data visualizations
-- **Framer Motion** for animations
-- **React Router** for navigation
-- **Mock WebSocket** hooks for live data simulation
-- Fully typed with TypeScript
-- Component-based architecture
-- Custom hooks and utilities
+- **Web3 Integration** - Wallet connection support with ConnectKit
+- **Real-time Data Streaming** - Server-sent events for live price updates
+- **Responsive Design** - Optimized for desktop, tablet, and mobile devices
+- **Dark Mode** - Professional trading terminal aesthetic
+- **Performance Optimized** - Efficient caching and data management
 
-## 📁 Project Structure
+## 🏗️ Architecture
 
+### Frontend Stack
+
+- **React 18** - Modern React with hooks and functional components
+- **TypeScript** - Type-safe development with full TypeScript support
+- **Vite** - Fast build tool and development server
+- **TailwindCSS** - Utility-first CSS framework with custom design system
+- **Framer Motion** - Smooth animations and transitions
+- **React Query** - Data fetching, caching, and synchronization
+- **React Router** - Client-side routing and navigation
+
+### Backend & Infrastructure
+
+- **Cloudflare Workers** - Serverless backend for API proxying and data processing
+- **Supabase** - Database, authentication, and real-time subscriptions
+- **Cloudflare R2** - Object storage for static assets
+
+### Web3 & Blockchain
+
+- **Wagmi** - React hooks for Ethereum
+- **Viem** - Low-level Ethereum library
+- **ConnectKit** - Wallet connection UI and management
+- **Ethers.js** - Ethereum wallet and contract interaction
+
+## 📊 PYTH Network Integration
+
+PaperFi leverages Pyth Network's comprehensive price infrastructure to provide real-time, institutional-grade market data for an authentic trading experience.
+
+### Key Integration Points
+
+#### 1. Real-time Price Streaming
+
+The trading interface connects directly to Pyth's Hermes API for live price updates:
+
+```typescript
+// Real-time price streaming from Hermes
+const eventSource = new EventSource(
+  `https://hermes.pyth.network/v2/updates/price/stream?ids%5B%5D=${assetId}&parsed=true`
+);
+
+eventSource.onmessage = event => {
+  const data = JSON.parse(event.data);
+  if (data.parsed && data.parsed[0].price) {
+    const price = BigInt(data.parsed[0].price.price);
+    const expo = data.parsed[0].price.expo;
+    const formattedPrice = Number(price) * Math.pow(10, expo);
+    updateCurrentPrice(formattedPrice);
+  }
+};
 ```
-src/
-├── components/
-│   ├── ui/              # Shadcn UI components
-│   ├── Navbar.tsx       # Top navigation
-│   ├── Sidebar.tsx      # Side navigation
-│   ├── StatsCard.tsx    # Reusable stat display
-│   ├── MiniChart.tsx    # Small chart component
-│   └── Heatmap.tsx      # Activity heatmap
-├── pages/
-│   ├── Landing.tsx      # Landing page
-│   ├── Login.tsx        # Login page
-│   ├── Signup.tsx       # Signup page
-│   ├── Dashboard.tsx    # Main dashboard
-│   ├── Trade.tsx        # Trading terminal
-│   ├── Analytics.tsx    # Performance analytics
-│   ├── Leaderboard.tsx  # Global rankings
-│   ├── Portfolio.tsx    # Portfolio management
-│   ├── Settings.tsx     # User settings
-│   ├── Clients.tsx      # Client portal
-│   └── Challenges.tsx   # Challenge system
-├── data/
-│   └── mockData.ts      # Mock data for simulation
-├── App.tsx              # Main app component
-├── index.css            # Global styles & design system
-└── main.tsx             # Entry point
+
+#### 2. Asset Discovery
+
+The platform fetches all available trading pairs from Pyth's price feeds:
+
+```typescript
+// Fetch all available assets from Pyth
+const assets = await axios.get<HermesAsset[]>(
+  "https://hermes.pyth.network/v2/price_feeds"
+);
 ```
 
-## 🎨 Design System
+#### 3. TradingView Integration
 
-All colors are defined as HSL variables in `src/index.css`:
+Charts are powered by TradingView with Pyth data feeds:
 
-- **Primary**: Electric blue (`hsl(243 75% 59%)`)
-- **Secondary**: Deep purple (`hsl(270 70% 60%)`)
-- **Accent**: Teal (`hsl(174 72% 56%)`)
-- **Success**: Green (`hsl(142 76% 36%)`)
-- **Loss**: Red (`hsl(0 72% 51%)`)
+```javascript
+// TradingView ticker tape with Pyth symbols
+"symbols": [
+  { "proName": "PYTH:BTCUSD", "title": "Bitcoin" },
+  { "proName": "PYTH:ETHUSD", "title": "Ethereum" },
+  { "proName": "PYTH:SOLUSD", "title": "Solana" },
+  { "proName": "PYTH:BNBUSD", "title": "Binance" }
+]
+```
 
-Custom utility classes:
+#### 4. Historical Data & Charts
 
-- `.glass` - Glassmorphism effect
-- `.glass-hover` - Interactive glass panel
-- `.glow-primary` - Primary color glow
-- `.glow-success` - Success color glow
-- `.glow-loss` - Loss color glow
-- `.gradient-text` - Gradient text effect
+Professional charts with historical price data via Pyth's TradingView integration:
 
-## 🛠️ Development
+```typescript
+const datafeed_proxy_base_url =
+  "https://benchmarks.pyth.network/v1/shims/tradingview";
+```
+
+### Supported Assets
+
+PaperFi supports all assets available through Pyth Network, including:
+
+- **Major Cryptocurrencies**: BTC, ETH, SOL, BNB, XRP, ADA, AVAX, DOT, MATIC
+- **DeFi Tokens**: UNI, AAVE, COMP, MKR, SNX, CRV, YFI
+- **Layer 1 Tokens**: ATOM, NEAR, FTM, ALGO, ICP, FLOW
+- **Stablecoins**: USDT, USDC, BUSD, DAI, FRAX
+- **Meme Coins**: DOGE, SHIB, PEPE, BONK
+- **And 100+ more trading pairs**
+
+### Real-time Data Features
+
+#### Price Accuracy
+
+- **Sub-second Updates**: Price updates typically arrive within 400ms of on-chain publication
+- **High Precision**: Prices maintain full precision with configurable decimal places
+- **Confidence Intervals**: Each price includes confidence interval data for risk assessment
+- **Publication Times**: Exact timestamps for each price update
+
+#### Data Reliability
+
+- **Multiple Publishers**: Prices aggregated from 80+ first-party publishers
+- **Redundancy**: Multiple data sources ensure high availability
+- **Validation**: All prices go through Pyth's rigorous validation process
+- **Fallback Handling**: Graceful degradation when real-time data is unavailable
+
+#### Market Data Coverage
+
+- **24/7 Availability**: Continuous price feeds for crypto markets
+- **Global Markets**: Coverage of major crypto exchanges worldwide
+- **Cross-chain Assets**: Support for assets across multiple blockchains
+- **Emerging Markets**: Early access to new and trending crypto assets
+
+### Integration Benefits
+
+#### For Traders
+
+- **Authentic Experience**: Trade with the same data used by professional institutions
+- **Real Market Conditions**: Experience actual market volatility and price movements
+- **Accurate Backtesting**: Historical data allows for precise strategy testing
+- **Professional Tools**: Access to institutional-grade price infrastructure
+
+#### For Developers
+
+- **Easy Integration**: Simple REST APIs and WebSocket connections
+- **Comprehensive Documentation**: Well-documented endpoints and data formats
+- **Scalable Architecture**: Handle high-frequency updates without performance issues
+- **Cost Effective**: No need to aggregate data from multiple sources
+
+## 🛠️ Development Setup
 
 ### Prerequisites
 
-- Node.js 16+
-- npm or yarn
+- Node.js 18+ or Bun
+- Git
 
 ### Installation
 
 ```bash
 # Clone the repository
-git clone <YOUR_GIT_URL>
-
-# Navigate to project directory
-cd <YOUR_PROJECT_NAME>
-
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
+git clone https://github.com/paperfi/PaperFi.git
+cd PaperFi
+bun install
+bun run dev
 ```
 
-The app will be available at `http://localhost:8080`
+The application will be available at `http://localhost:5173`
 
-### Build for Production
+### Environment Variables
+
+Create a `.env` file based on `.env.example`:
 
 ```bash
-npm run build
+cp .env.example .env
 ```
 
-## 📊 Mock Data
+## 📁 Project Structure
 
-The platform uses comprehensive mock data defined in `src/data/mockData.ts`:
+```
+paper/
+├── src/
+│   ├── components/          # Reusable UI components
+│   │   ├── ui/             # Shadcn/ui components
+│   │   ├── charts/         # Chart components and Pyth integration
+│   │   │   ├── PerpChart.tsx
+│   │   │   ├── TickerTape.tsx
+│   │   │   └── pythStreaming.ts
+│   │   ├── Navbar.tsx
+│   │   └── Sidebar.tsx
+│   ├── pages/              # Application pages
+│   │   ├── app/           # Protected app pages
+│   │   │   ├── Launchpad/ # Asset selection and trading pairs
+│   │   │   └── ...
+│   │   ├── Trade.tsx      # Main trading interface
+│   │   ├── Dashboard.tsx  # Trading dashboard
+│   │   └── ...
+│   ├── contexts/          # React contexts
+│   │   ├── AuthProvider.tsx
+│   │   └── Web3Provider.tsx
+│   ├── hooks/             # Custom React hooks
+│   ├── lib/              # Utility functions
+│   ├── types/            # TypeScript type definitions
+│   │   ├── Assets.ts     # Pyth asset types
+│   │   └── ...
+│   ├── worker/           # Cloudflare Worker backend
+│   │   └── index.ts      # API proxy and data processing
+│   └── ...
+├── public/               # Static assets
+├── dist/                # Build output
+└── ...
+```
 
-- User profile information
-- Trading history (P&L, trades, positions)
-- Market data (prices, volumes)
-- Leaderboard rankings
-- Funding offers
-- Activity heatmaps
+### Key Files for Pyth Integration
 
-All data is designed to simulate a real trading environment for demonstration purposes.
+- `src/components/charts/pythStreaming.ts` - Real-time price streaming logic
+- `src/pages/Trade.tsx` - Trading interface with live price updates
+- `src/pages/app/Launchpad/Launchpad.tsx` - Asset discovery from Pyth feeds
+- `src/components/charts/TickerTape.tsx` - TradingView ticker with Pyth symbols
+- `src/types/Assets.ts` - TypeScript types for Pyth asset data
+- `src/worker/index.ts` - Backend proxy for Pyth TradingView integration
 
-## 🎯 Key Pages
+## 🎨 UI/UX Design
 
-### Landing Page (`/`)
+### Design System
 
-- Hero section with platform tagline
-- Animated statistics
-- Features showcase
-- Footer with links
+- **Color Palette**: Dark theme with electric blue and purple accents
+- **Typography**: Inter font family for excellent readability
+- **Layout**: Responsive grid system with mobile-first approach
+- **Animation**: Smooth Framer Motion animations for enhanced UX
 
-### Dashboard (`/app/dashboard`)
+### Trading Terminal Features
 
-- Quick stats cards (P&L, Win Rate, Streak, Rank)
-- Activity heatmap
-- Weekly P&L chart
-- Recent trades list
-- Funding offers
+- **Professional Layout**: Modeled after institutional trading platforms
+- **Customizable Charts**: TradingView integration with technical indicators
+- **Order Panel**: Intuitive long/short position controls
+- **Portfolio View**: Real-time position tracking and P&L calculation
 
-### Trade Terminal (`/app/trade`)
+## 🚀 Deployment
 
-- Real-time price charts
-- Order panel (Long/Short)
-- Market selector
-- Open positions tracker
-- Trade history
+### Cloudflare Workers
 
-### Analytics (`/app/analytics`)
+The application is designed to run on Cloudflare's edge network:
 
-- Performance metrics
-- P&L over time chart
-- Win/loss ratio pie chart
-- Trades by pair
-- Achievement badges
-- AI insights
+```bash
+# Configure Cloudflare Workers
+npx wrangler login
 
-### Leaderboard (`/app/leaderboard`)
+# Deploy to production
+bun run deploy
+```
 
-- Global rankings
-- Timeframe filters
-- Trader search
-- Performance metrics
-- View profiles
+## 🔐 Security & Privacy
 
-## 🔒 Authentication Flow
+- **Client-side Only**: No sensitive data stored on servers
+- **Wallet Security**: Non-custodial wallet connections
+- **Data Encryption**: All API communications over HTTPS
+- **Privacy First**: Minimal data collection and storage
 
-1. User visits landing page
-2. Clicks "Get Started" or "Login"
-3. Enters credentials or connects wallet
-4. Redirected to Dashboard
+## 🙏 Acknowledgments
 
-_Note: Current implementation is mock authentication. Integrate with your backend for production._
-
-## 🚢 Deployment
-
-This project is ready to deploy to:
-
-- Vercel
-- Netlify
-- Cloudflare Pages
-- Any static hosting service
-
-Simply connect your Git repository and deploy!
-
-## 🎨 UI Components
-
-Built with Shadcn UI components:
-
-- Buttons, Inputs, Labels
-- Cards, Tabs, Tooltips
-- Dialogs, Dropdowns
-- Charts (Recharts)
-
-All components are customized to match the dark crypto theme.
-
-## 📱 Responsive Design
-
-- **Mobile**: Simplified layouts, collapsible sections
-- **Tablet**: Adapted grid layouts
-- **Desktop**: Full experience with sidebar
-
-## 🔮 Future Enhancements
-
-- Real WebSocket integration for live data
-- Backend API integration
-- User authentication system
-- Real funding marketplace
-- Social features (follow traders, copy trading)
-- Advanced charting tools
-- Mobile app version
-
-## 📄 License
-
-This project is built for demonstration purposes.
-
-## 🤝 Contributing
-
-This is a frontend showcase project. Feel free to fork and customize for your needs.
-
----
+- **Pyth Network** for providing institutional-grade price feeds
+- **TradingView** for professional charting capabilities
+- **Supabase** for backend infrastructure
+- **Cloudflare** for edge computing and deployment
+- **Shadcn/ui** for beautiful UI components
