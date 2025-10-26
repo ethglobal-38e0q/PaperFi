@@ -37,6 +37,8 @@ import {
 } from "lucide-react";
 import { HermesAsset } from "@/types/Assets";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { axiosCached } from "@/lib/utils";
 
 const AssetCard = ({
   asset,
@@ -110,19 +112,33 @@ const Launchpad = () => {
   const [sortBy, setSortBy] = useState("symbol");
   const [isLoading, setIsLoading] = useState(true);
   const [assets, setAssets] = useState<HermesAsset[]>([]);
+  const navigate = useNavigate();
 
   const itemsPerPage = 12;
 
   useEffect(() => {
     const loadAssets = async () => {
       setIsLoading(true);
-      const assets = await axios.get(
+      const assets = await axiosCached.get<HermesAsset[]>(
         "https://hermes.pyth.network/v2/price_feeds"
       );
-      setAssets(assets.data);
+      let toBubble = new Set([
+        "BTC/USD",
+        "ETH/USD",
+        "SOL/USD",
+        "BNB/USD",
+        "XRP/USD",
+      ]);
+
+      setAssets(
+        assets.data.toSorted(
+          (a, b) =>
+            (toBubble.has(b.attributes.display_symbol) ? 1 : 0) -
+            (toBubble.has(a.attributes.display_symbol) ? 1 : 0)
+        )
+      );
       setIsLoading(false);
     };
-
     loadAssets();
   }, []);
 
@@ -161,10 +177,7 @@ const Launchpad = () => {
   );
 
   const handleAssetClick = (asset: HermesAsset) => {
-    window.open(
-      `/app/trade?pair=${asset.attributes.symbol}&id=${asset.id}`,
-      "_blank"
-    );
+    navigate(`/app/trade?pair=${asset.attributes.symbol}&id=${asset.id}`);
   };
 
   const stats = [
@@ -202,7 +215,7 @@ const Launchpad = () => {
             <Rocket className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-primary">Asset Launchpad</h1>
+            <h1 className="text-3xl font-bold text-primary">Perpetuals</h1>
             <p className="text-muted-foreground">
               Discover and trade digital assets across multiple markets
             </p>

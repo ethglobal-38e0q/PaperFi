@@ -20,17 +20,21 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import TickerTapeWidget from "@/components/charts/TickerTape";
 import { toast } from "@/hooks/use-toast";
 import { customPriceFormatter } from "@/lib/utils";
+import { Slider } from "@/components/ui/slider";
+import { useAuth } from "@/contexts/AuthProvider";
 
 const Trade = () => {
   const [orderType, setOrderType] = useState<"LONG" | "SHORT">("LONG");
-  const [size, setSize] = useState("");
-  const [leverage, setLeverage] = useState("10");
+  const [margin, setMargin] = useState("");
+  const [leverage, setLeverage] = useState([0]);
   const [interval, setInterval] = useState("5m");
   const [currentPrice, setCurrentPrice] = useState(0);
   const sidebar = useSidebar();
+  const { supabase, user } = useAuth();
   const [params] = useSearchParams();
   const navigate = useNavigate();
   const selectedPair = params.get("pair") || "";
+  const symbol = selectedPair.toLocaleUpperCase().replace("CRYPTO.", "");
   const base = selectedPair
     .toLocaleUpperCase()
     .replace("CRYPTO.", "")
@@ -78,6 +82,37 @@ const Trade = () => {
       navigate("/app/launchpad");
     }
   }, [selectedPair]);
+
+  async function onClickTradeButton(e) {
+    e.preventDefault();
+    console.log("Trade button clicked");
+
+    const { error } = await supabase.from("user_trade_records").insert([
+      {
+        trade_type: orderType,
+        order_type: "OPEN",
+        asset_id: selectedId,
+        asset_symbol: symbol,
+        user_id: user.id,
+        margin: Number(margin),
+        leverage: Number(leverage[0]),
+        open_price: currentPrice,
+      },
+    ]);
+    if (error) {
+      toast({
+        title: "Failed to place order",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Order placed!",
+        description: `Your ${orderType} order for ${margin} ${base} has been submitted.`,
+      });
+      window.tradingChart?.activeChart()?.refreshMarks();
+    }
+  }
 
   return (
     <div className="p-2 h-full flex flex-col">
@@ -146,18 +181,19 @@ const Trade = () => {
                 </TabsTrigger>
               </TabsList>
             </Tabs>
-
-            <div>
-              <Label className="text-xs">Size ({base})</Label>
-              <Input
-                type="number"
-                placeholder="0.00"
-                value={size}
-                onChange={e => setSize(e.target.value)}
-                className="mt-1 h-9"
-              />
-              <div className="flex gap-2 mt-2">
-                {["25%", "50%", "75%", "100%"].map(percent => (
+            <form onSubmit={onClickTradeButton}>
+              <div>
+                <Label className="text-xs">Margin ({base})</Label>
+                <Input
+                  type="number"
+                  placeholder="0.00"
+                  value={margin}
+                  onChange={e => setMargin(e.target.value)}
+                  className="mt-1 h-9"
+                  required
+                />
+                <div className="flex gap-2 mt-2">
+                  {/*{["25%", "50%", "75%", "100%"].map(percent => (
                   <Button
                     key={percent}
                     variant="ghost"
@@ -166,30 +202,39 @@ const Trade = () => {
                   >
                     {percent}
                   </Button>
-                ))}
+                ))}*/}
+                </div>
               </div>
-            </div>
 
-            <div>
-              <Label className="text-xs">Leverage</Label>
-              <div className="flex gap-2 mt-1">
-                {["5x", "10x", "20x", "50x", "100x"].map(lev => (
-                  <Button
-                    key={lev}
-                    variant={
-                      leverage === lev.replace("x", "") ? "default" : "outline"
-                    }
-                    size="sm"
-                    onClick={() => setLeverage(lev.replace("x", ""))}
-                    className="flex-1 text-xs h-8"
-                  >
-                    {lev}
-                  </Button>
-                ))}
+              <div>
+                <div className="flex w-full max-w-md flex-col gap-2">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs">Leverage</Label>
+                    <span className="text-muted-foreground text-sm">
+                      {leverage[0]}
+                    </span>
+                  </div>
+                  <Slider
+                    max={125}
+                    min={0}
+                    onValueChange={setLeverage}
+                    step={25}
+                    value={leverage}
+                    className="text-green-500"
+                    form=""
+                  />
+                  <div className="flex items-center justify-between text-muted-foreground text-xs tabular-nums">
+                    <span className="w-6 text-left">0</span>
+                    <span className="w-6 text-center">25</span>
+                    <span className="w-6 text-center">50</span>
+                    <span className="w-6 text-center">75</span>
+                    <span className="w-6 text-right">100</span>
+                    <span className="w-6 text-right">125</span>
+                  </div>
+                </div>
               </div>
-            </div>
 
-            {/*<div className="grid grid-cols-2 gap-2">
+              {/*<div className="grid grid-cols-2 gap-2">
               <div>
                 <Label className="text-xs">Take Profit</Label>
                 <Input
@@ -208,36 +253,39 @@ const Trade = () => {
               </div>
             </div>*/}
 
-            <div className="bg-muted/30 p-3 rounded-lg text-xs space-y-1 mt-2">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Entry Price</span>
-                <span className="font-semibold font-mono">$0</span>
+              <div className="bg-muted/30 p-3 rounded-lg text-xs space-y-1 mt-2">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Entry Price</span>
+                  <span className="font-semibold font-mono">
+                    ${currentPrice}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Est. Liq. Price</span>
+                  <span className="font-semibold font-mono text-loss">
+                    ${(1.1).toFixed(2)}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Max Position</span>
+                  <span className="font-semibold">$10,000</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Est. Fee</span>
+                  <span className="font-semibold">0.075%</span>
+                </div>
               </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Est. Liq. Price</span>
-                <span className="font-semibold font-mono text-loss">
-                  ${(1.1).toFixed(2)}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Max Position</span>
-                <span className="font-semibold">$10,000</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Est. Fee</span>
-                <span className="font-semibold">0.075%</span>
-              </div>
-            </div>
 
-            {orderType === "LONG" ? (
-              <Button className="w-full bg-success hover:bg-success/80 font-bold h-10">
-                Open Long Position
-              </Button>
-            ) : (
-              <Button className="w-full bg-loss hover:bg-loss/80 font-bold h-10">
-                Open Short Position
-              </Button>
-            )}
+              {orderType === "LONG" ? (
+                <Button className="w-full bg-success hover:bg-success/80 font-bold h-10">
+                  Open Long Position
+                </Button>
+              ) : (
+                <Button className="w-full bg-loss hover:bg-loss/80 font-bold h-10">
+                  Open Short Position
+                </Button>
+              )}
+            </form>
           </div>
 
           {/* Account Info */}

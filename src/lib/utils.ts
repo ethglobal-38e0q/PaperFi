@@ -1,5 +1,8 @@
+import Axios from "axios";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { setupCache } from "axios-cache-interceptor";
+import axios from "axios";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -36,3 +39,5 @@ export function customPriceFormatter(symbolInfo) {
     },
   };
 }
+const instance = Axios.create();
+export const axiosCached = setupCache(instance);

@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import {
   TrendingUp,
   TrendingDown,
@@ -15,11 +16,11 @@ import Heatmap from "@/components/Heatmap";
 import MiniChart from "@/components/MiniChart";
 import {
   currentUser,
-  recentTrades,
   fundingOffers,
   pnlHistory,
   marketData,
 } from "@/data/mockData";
+import { RawTrade } from "@/types/supabase";
 import { useAuth } from "@/contexts/AuthProvider";
 import { useAccount } from "wagmi";
 import { Link } from "react-router-dom";
@@ -41,12 +42,71 @@ import {
 } from "recharts";
 
 const Dashboard = () => {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, supabase } = useAuth();
   const { address } = useAccount();
+  const [recentTrades, setRecentTrades] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const formatAddress = (address: string) => {
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
   };
+
+  // Transform RawTrade to the format expected by the UI
+  const transformTrade = (rawTrade: RawTrade) => {
+    const pnl =
+      rawTrade.close_price && rawTrade.open_price
+        ? rawTrade.trade_type === "LONG"
+          ? ((rawTrade.close_price - rawTrade.open_price) *
+              (rawTrade.margin || 0) *
+              (rawTrade.leverage || 1)) /
+            rawTrade.open_price
+          : ((rawTrade.open_price - rawTrade.close_price) *
+              (rawTrade.margin || 0) *
+              (rawTrade.leverage || 1)) /
+            rawTrade.open_price
+        : 0;
+
+    return {
+      id: rawTrade.id,
+      pair: rawTrade.asset_symbol,
+      type: rawTrade.trade_type,
+      entryPrice: rawTrade.open_price || 0,
+      exitPrice: rawTrade.close_price || null,
+      size: rawTrade.margin || 0,
+      leverage: rawTrade.leverage || 1,
+      pnl: pnl,
+      pnlPercent: rawTrade.open_price
+        ? (pnl / ((rawTrade.margin || 0) * (rawTrade.leverage || 1))) * 100
+        : 0,
+      timestamp: rawTrade.timestamp,
+      status: rawTrade.order_type === "CLOSE" ? "closed" : "open",
+    };
+  };
+
+  // Fetch trades from Supabase
+  useEffect(() => {
+    if (user && supabase) {
+      setIsLoading(true);
+      supabase
+        .from("user_trade_records")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("timestamp", { ascending: false })
+        .limit(20)
+        .then(({ data, error }: { data: RawTrade[] | null; error: any }) => {
+          if (error) {
+            console.error("Error fetching trades:", error);
+            setRecentTrades([]);
+          } else if (data) {
+            const transformedTrades = data.map(transformTrade);
+            setRecentTrades(transformedTrades);
+          }
+          setIsLoading(false);
+        });
+    } else {
+      setIsLoading(false);
+    }
+  }, [user, supabase]);
 
   const container = {
     hidden: { opacity: 0 },
@@ -315,9 +375,9 @@ const Dashboard = () => {
           >
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold">Market Overview</h3>
-              <Link to="/app/trade">
+              <Link to="/app/launchpad">
                 <Button variant="outline" size="sm">
-                  Open Trade Terminal
+                  Open Launchpad
                 </Button>
               </Link>
             </div>
@@ -385,45 +445,65 @@ const Dashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {recentTrades.slice(0, 8).map(trade => (
-                    <tr
-                      key={trade.id}
-                      className="border-b border-border/50 hover:bg-muted/20"
-                    >
-                      <td className="py-2 text-muted-foreground">
-                        {new Date(trade.timestamp).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </td>
-                      <td className="py-2 font-semibold">{trade.pair}</td>
-                      <td className="py-2">
-                        <span
-                          className={`px-2 py-0.5 rounded text-xs font-semibold ${
-                            trade.type === "LONG"
-                              ? "bg-success/20 text-success"
-                              : "bg-loss/20 text-loss"
-                          }`}
-                        >
-                          {trade.type}
-                        </span>
-                      </td>
-                      <td className="py-2 text-right font-mono">
-                        {trade.size}
-                      </td>
-                      <td className="py-2 text-right font-mono">
-                        ${trade.entryPrice}
-                      </td>
-                      <td className="py-2 text-right font-mono">
-                        ${trade.exitPrice || "Open"}
-                      </td>
+                  {isLoading ? (
+                    <tr>
                       <td
-                        className={`py-2 text-right font-bold ${trade.pnl > 0 ? "text-success" : "text-loss"}`}
+                        colSpan={7}
+                        className="py-8 text-center text-muted-foreground"
                       >
-                        {trade.pnl > 0 ? "+" : ""}${trade.pnl.toFixed(2)}
+                        Loading trades...
                       </td>
                     </tr>
-                  ))}
+                  ) : recentTrades.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan={7}
+                        className="py-8 text-center text-muted-foreground"
+                      >
+                        No trades found. Start trading to see your history here.
+                      </td>
+                    </tr>
+                  ) : (
+                    recentTrades.slice(0, 8).map(trade => (
+                      <tr
+                        key={trade.id}
+                        className="border-b border-border/50 hover:bg-muted/20"
+                      >
+                        <td className="py-2 text-muted-foreground">
+                          {new Date(trade.timestamp).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </td>
+                        <td className="py-2 font-semibold">{trade.pair}</td>
+                        <td className="py-2">
+                          <span
+                            className={`px-2 py-0.5 rounded text-xs font-semibold ${
+                              trade.type === "LONG"
+                                ? "bg-success/20 text-success"
+                                : "bg-loss/20 text-loss"
+                            }`}
+                          >
+                            {trade.type}
+                          </span>
+                        </td>
+                        <td className="py-2 text-right font-mono">
+                          {trade.size}
+                        </td>
+                        <td className="py-2 text-right font-mono">
+                          ${trade.entryPrice}
+                        </td>
+                        <td className="py-2 text-right font-mono">
+                          ${trade.exitPrice || "Open"}
+                        </td>
+                        <td
+                          className={`py-2 text-right font-bold ${trade.pnl > 0 ? "text-success" : "text-loss"}`}
+                        >
+                          {trade.pnl > 0 ? "+" : ""}${trade.pnl.toFixed(2)}
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>

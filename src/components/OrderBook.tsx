@@ -10,12 +10,13 @@ const generateOrders = (isAsk: boolean, currPrice: number) => {
   const orders: OrderBookEntry[] = [];
   let total = 0;
   for (let i = 0; i < 5; i++) {
-    const price = isAsk
-      ? (currPrice + Math.random() * 5) / 10
-      : currPrice - Math.random() * 5;
+    const multiplier = isAsk
+      ? Math.random() * 0.1 + 1.0 // 1.0 to 1.1
+      : Math.random() * 0.1 + 0.9; // 0.9 to 1.0
+    const price = Number(currPrice) * multiplier;
     const size = Math.random() * 2 + 0.1;
     total += size;
-    orders.push({ price: parseInt(price.toString()), size, total });
+    orders.push({ price, size, total });
   }
   return orders;
 };
