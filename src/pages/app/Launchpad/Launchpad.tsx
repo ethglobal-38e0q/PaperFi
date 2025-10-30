@@ -123,9 +123,9 @@ const Launchpad = () => {
         "https://hermes.pyth.network/v2/price_feeds"
       );
       let toBubble = new Set([
+        "SOL/USD",
         "BTC/USD",
         "ETH/USD",
-        "SOL/USD",
         "BNB/USD",
         "XRP/USD",
       ]);
